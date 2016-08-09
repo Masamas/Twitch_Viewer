@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Media.Imaging;
+using System.Windows;
 
 namespace Twitch_Viewer
 {
@@ -21,6 +22,17 @@ namespace Twitch_Viewer
         public string Viewers { get { return viewers; } set { viewers = value; OnPropertyChanged(MethodInfo.GetCurrentMethod()); } }
         public StreamStatsItem StreamStats { get { return MainWindow.settings.StreamStats.FirstOrDefault(stats => stats.Name == this.name); } }
         public GameStatsItem GameStats { get { return MainWindow.settings.GameStats.FirstOrDefault(stats => stats.Name == this.curGame); } }
+
+        public Visibility SavedVisibility
+        {
+            get
+            {
+                if (StreamStats == null)
+                    return Visibility.Collapsed;
+
+                return StreamStats.Saved ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
