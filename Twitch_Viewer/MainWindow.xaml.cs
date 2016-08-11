@@ -118,6 +118,17 @@ namespace Twitch_Viewer
             }
         }
 
+        private string selectedQuality;
+        public string SelectedQuality
+        {
+            get { return selectedQuality; }
+            set
+            {
+                selectedQuality = value;
+                OnPropertyChanged("SelectedQuality");
+            }
+        }
+
         #region Settings
         private string livestreamerArgs = "";
         public string LivestreamerArgs
@@ -186,6 +197,7 @@ namespace Twitch_Viewer
             InitializeComponent();
 
             comboBoxQuality.DataContext = this;
+            comboBoxQualityDirectory.DataContext = this;
             fillTab.DataContext = this;
             statsTab.DataContext = settings;
 
@@ -362,9 +374,8 @@ namespace Twitch_Viewer
         private void watchButton_Click(object sender, RoutedEventArgs e)
         {
             var link = getStreamLink();
-            var selectedQuality = comboBoxQuality.Text;
 
-            string args = LivestreamerArgs != null && LivestreamerArgs.Length != 0 ? $"{LivestreamerArgs} {link} {selectedQuality}" : $"{link} {selectedQuality}";
+            string args = LivestreamerArgs != null && LivestreamerArgs.Length != 0 ? $"{LivestreamerArgs} {link} {SelectedQuality}" : $"{link} {SelectedQuality}";
 
             Process p = Process.Start(@"C:\program files (x86)\Livestreamer\livestreamer.exe", args);
         }
@@ -722,9 +733,8 @@ namespace Twitch_Viewer
         private void streamItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             var streamItem = (StreamItem)(sender as Grid).DataContext;
-            var selectedQuality = comboBoxQuality.Text;
 
-            streamItem.StartStream(selectedQuality, LivestreamerArgs, this);
+            streamItem.StartStream(SelectedQuality, LivestreamerArgs, this);
         }
 
         private void Grid_PreviewKeyDown(object sender, KeyEventArgs e)

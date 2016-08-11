@@ -93,7 +93,7 @@
                         <TextBlock x:Name="textBlockStreamLink" TextWrapping="NoWrap" Text="Streamlink:" VerticalAlignment="Center"/>
                     </Border>
                     <TextBox x:Name="textBoxStreamLink" Height="23" Margin="80,0,217,10" VerticalAlignment="Bottom"/>
-                    <ComboBox x:Name="comboBoxQuality" Margin="0,0,120,10" VerticalAlignment="Bottom" ItemsSource="{Binding Quality}" Text="Select Quality" SelectedIndex="3" FontWeight="Bold" HorizontalAlignment="Right" Width="80"/>
+                    <ComboBox x:Name="comboBoxQuality" Margin="0,0,120,10" VerticalAlignment="Bottom" ItemsSource="{Binding Quality}" Text="{Binding SelectedQuality}" SelectedIndex="3" FontWeight="Bold" HorizontalAlignment="Right" Width="80"/>
                     <Button x:Name="buttonWatch" Content="Watch!" HorizontalAlignment="Right" Margin="0,0,40,10" VerticalAlignment="Bottom" Width="75" Click="watchButton_Click"/>
                     <Button x:Name="buttonStreamListAdd" Content="+" Margin="0,0,10,10" VerticalAlignment="Bottom" Click="streamListAddButton_Click" HorizontalAlignment="Right" Width="25"/>
                 </Grid>
@@ -124,6 +124,7 @@
                         <Image x:Name="gameViewBackButton" Source="imageResources/Back.png" Stretch="None" Visibility="Collapsed" MouseLeftButtonUp="directoryHeader_MouseLeftButtonUp" />
                         <Label x:Name="directoryHeader" Content="Games" FontFamily="Arial Black" FontWeight="Bold" FontSize="18" Margin="0,5,0,0" MouseLeftButtonUp="directoryHeader_MouseLeftButtonUp"/>
                     </StackPanel>
+                    <ComboBox x:Name="comboBoxQualityDirectory" Margin="0,10,210,0" VerticalAlignment="Top" ItemsSource="{Binding Quality}" Text="{Binding SelectedQuality}" SelectedIndex="3" FontWeight="Bold" HorizontalAlignment="Right" Width="80"/>
                     <Label x:Name="labelDirectoryFilter" Content="Filter:" FontFamily="Arial" FontWeight="Bold" Margin="0,10,155,0" HorizontalAlignment="Right" VerticalAlignment="Top" />
                     <TextBox x:Name="textBoxDirectoryFilter" Height="23" Margin="0,10,30,0" Width="120" HorizontalAlignment="Right" VerticalAlignment="Top" TextChanged="textBoxDirectoryFilter_TextChanged" />
                     <ScrollViewer x:Name="directoryScrollViewer" Margin="0,43,0,0" VerticalScrollBarVisibility="Auto" ScrollChanged="ScrollViewer_ScrollChanged">
@@ -173,7 +174,11 @@
                                                 </Image>
                                                 <Image Source="imageResources/HeartBorder.png" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,45" Panel.ZIndex="2" Visibility="{Binding SavedVisibility}" />
                                                 <Label Content="{Binding DisplayName}" FontWeight="Bold" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-                                                <Button Content="+" FontFamily="Arial Black" BorderBrush="{x:Null}" Background="{x:Null}" Width="20" Height="20" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="addButton_Click" />
+                                                <Button FontFamily="Arial Black" BorderBrush="{x:Null}" Background="{x:Null}" Width="20" Height="20" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="addButton_Click" >
+                                                    <Button.Content>
+                                                        <Image Source="imageResources/HeartBorder.png" Stretch="Fill" />
+                                                    </Button.Content>
+                                                </Button>
                                                 <Image Source="imageResources/Viewer.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,20"/>
                                                 <Label Content="{Binding Viewers}" FontFamily="Arial Black" Foreground="Red" Margin="18,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="1"/>
                                                 <Label Content="{Binding CurGame}" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
