@@ -372,6 +372,7 @@ namespace Twitch_Viewer
 
         private void watchButton_Click(object sender, RoutedEventArgs e)
         {
+            var link = getStreamLink();
             string args = LivestreamerArgs != null && LivestreamerArgs.Length != 0 ? $"{LivestreamerArgs} {link} {SelectedQuality}" : $"{link} {SelectedQuality}";
 
             Process p = Process.Start(@"C:\program files (x86)\Livestreamer\livestreamer.exe", args);
