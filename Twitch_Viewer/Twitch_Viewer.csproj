@@ -99,9 +99,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ChannelList.cs" />
+    <Compile Include="ChannelListViewModel.cs" />
+    <Compile Include="Directory.cs" />
     <Compile Include="DirectoryHandler.cs" />
+    <Compile Include="DirectoryViewModel.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="SettingsViewModel.cs" />
+    <Compile Include="StreamList.cs" />
+    <Compile Include="StreamListViewModel.cs" />
     <Compile Include="Types\GameItem.cs" />
     <Compile Include="Types\GameStatsItem.cs" />
     <Compile Include="Settings.cs" />

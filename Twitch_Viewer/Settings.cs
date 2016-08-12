@@ -62,7 +62,6 @@ namespace Twitch_Viewer
     public class Settings : INotifyPropertyChanged
     {
         private Stopwatch sw;
-        private Timer _timer;
 
         #region Properties
         private string livestreamerArgs = "";
@@ -148,15 +147,12 @@ namespace Twitch_Viewer
         #endregion
         #endregion
 
-        private readonly object lockObjectViewTimes = new object();
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Settings()
         {
             sw = new Stopwatch();
             sw.Start();
-            _timer = new Timer(new TimerCallback((s) => this.OnPropertyChanged("TotalRunTime")), null, 1000, 1000);
         }
 
         public void ResetStats()

@@ -13,53 +13,13 @@ namespace Twitch_Viewer
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private MainWindow _window;
+
+
+        #region Properties
         public MainWindow Window
         {
             get { return _window; }
             set { _window = value; }
-        }
-
-        #region Properties
-        public ObservableCollection<StreamItem> ItemsOnline
-        {
-            get { return Window.ItemsOnline; }
-            set { Window.ItemsOnline = value; }
-        }
-
-        public ObservableCollection<StreamItem> ItemsOffline
-        {
-            get { return Window.ItemsOffline; }
-            set { Window.ItemsOffline = value; }
-        }
-
-        public ObservableCollection<GameItem> Games
-        {
-            get { return Window.Games; }
-            set { Window.Games = value; }
-        }
-
-        public ObservableCollection<GameItem> GamesFiltered
-        {
-            get { return Window.GamesFiltered; }
-            set { Window.GamesFiltered = value; }
-        }
-
-        public ObservableCollection<StreamItem> GameStreams
-        {
-            get { return Window.GameStreams; }
-            set { Window.GameStreams = value; }
-        }
-
-        public ObservableCollection<StreamItem> Channels
-        {
-            get { return Window.Channels; }
-            set { Window.Channels = value; }
-        }
-
-        public ObservableCollection<StreamItem> StreamsFiltered
-        {
-            get { return Window.StreamsFiltered; }
-            set { Window.StreamsFiltered = value; }
         }
 
         public static List<string> Quality

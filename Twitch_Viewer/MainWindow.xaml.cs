@@ -22,6 +22,10 @@ namespace Twitch_Viewer
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private MainWindowViewModel _viewModel;
+        private SettingsViewModel _settingsViewModel;
+        private StreamListViewModel _streamListViewModel;
+        private DirectoryViewModel _directoryViewModel;
+        private ChannelListViewModel _channelListViewModel;
 
         private Twixel twixel;
         public static Settings settings;
@@ -34,83 +38,6 @@ namespace Twitch_Viewer
         private int channelsOffset = 0;
 
         #region Properties
-        private ObservableCollection<StreamItem> itemsOnline;
-        public ObservableCollection<StreamItem> ItemsOnline
-        {
-            get { return itemsOnline; }
-            set
-            {
-                itemsOnline = value;
-                BindingOperations.EnableCollectionSynchronization(itemsOnline, lockObjectOnline);
-            }
-        }
-
-        private ObservableCollection<StreamItem> itemsOffline;
-        public ObservableCollection<StreamItem> ItemsOffline
-        {
-            get { return itemsOffline; }
-            set
-            {
-                itemsOffline = value;
-                BindingOperations.EnableCollectionSynchronization(itemsOffline, lockObjectOffline);
-            }
-        }
-
-        private ObservableCollection<GameItem> games;
-        public ObservableCollection<GameItem> Games
-        {
-            get { return games; }
-            set
-            {
-                games = value;
-                BindingOperations.EnableCollectionSynchronization(games, lockObjectGames);
-            }
-        }
-
-        private ObservableCollection<GameItem> gamesFiltered;
-        public ObservableCollection<GameItem> GamesFiltered
-        {
-            get { return gamesFiltered; }
-            set
-            {
-                gamesFiltered = value;
-                BindingOperations.EnableCollectionSynchronization(gamesFiltered, lockObjectGames);
-            }
-        }
-
-        private ObservableCollection<StreamItem> gameStreams;
-        public ObservableCollection<StreamItem> GameStreams
-        {
-            get { return gameStreams; }
-            set
-            {
-                gameStreams = value;
-                BindingOperations.EnableCollectionSynchronization(gameStreams, lockObjectGameStreams);
-            }
-        }
-
-        private ObservableCollection<StreamItem> channels;
-        public ObservableCollection<StreamItem> Channels
-        {
-            get { return channels; }
-            set
-            {
-                channels = value;
-                BindingOperations.EnableCollectionSynchronization(channels, lockObjectChannels);
-            }
-        }
-
-        private ObservableCollection<StreamItem> streamsFiltered;
-        public ObservableCollection<StreamItem> StreamsFiltered
-        {
-            get { return streamsFiltered; }
-            set
-            {
-                streamsFiltered = value;
-                BindingOperations.EnableCollectionSynchronization(streamsFiltered, lockObjectStreamsFiltered);
-            }
-        }
-
         private static List<string> quality;
         public static List<string> Quality
         {
@@ -120,7 +47,7 @@ namespace Twitch_Viewer
             }
         }
 
-        private string selectedQuality;
+        private static string selectedQuality;
         public string SelectedQuality
         {
             get { return selectedQuality; }
@@ -165,13 +92,7 @@ namespace Twitch_Viewer
         }
         #endregion
         #region lockObjects
-        private readonly object lockObjectOnline = new object();
-        private readonly object lockObjectOffline = new object();
-        private readonly object lockObjectGames = new object();
-        private readonly object lockObjectGameStreams = new object();
-        private readonly object lockObjectChannels = new object();
         private readonly object lockObjectRefresh = new object();
-        private readonly object lockObjectStreamsFiltered = new object();
         private readonly object lockObjectSettings = new object();
         #endregion
 
@@ -179,18 +100,13 @@ namespace Twitch_Viewer
 
         public MainWindow()
         {
-            _viewModel = new MainWindowViewModel(this);
-
             settings = ((App)Application.Current).settings;
 
-            refreshInterval = settings.RefreshInterval;
-            livestreamerArgs = settings.LivestreamerArgs;
-
-            ItemsOnline = new ObservableCollection<StreamItem>();
-            ItemsOffline = new ObservableCollection<StreamItem>();
-            Games = new ObservableCollection<GameItem>();
-            GameStreams = new ObservableCollection<StreamItem>();
-            Channels = new ObservableCollection<StreamItem>();
+            _viewModel = new MainWindowViewModel(this);
+            _settingsViewModel = new SettingsViewModel(settings);
+            _streamListViewModel = new StreamListViewModel(new StreamList());
+            _directoryViewModel = new DirectoryViewModel(new Directory());
+            _channelListViewModel = new ChannelListViewModel(new ChannelList());
 
             quality = new List<string>() { "low", "medium", "high", "source" };
 
@@ -198,7 +114,10 @@ namespace Twitch_Viewer
 
             base.DataContext = _viewModel;
 
-            statsTab.DataContext = settings;
+            statsTab.DataContext = _settingsViewModel;
+            streamListTab.DataContext = _streamListViewModel;
+            directoryTab.DataContext = _directoryViewModel;
+            channelsTab.DataContext = _channelListViewModel;
 
             ShowDebugSettings();
 
@@ -231,101 +150,16 @@ namespace Twitch_Viewer
 
             await Task.WhenAll(tasks);
 
-            itemsOnline.Sort();
-            itemsOffline.Sort(item => item.DisplayName);
+            _streamListViewModel.ItemsOnline.Sort();
+            _streamListViewModel.ItemsOffline.Sort(item => item.DisplayName);
 
-            streamListOnline.ItemsSource = ItemsOnline;
-            streamListOffline.ItemsSource = ItemsOffline;
+            streamListOnline.ItemsSource = _streamListViewModel.ItemsOnline;
+            streamListOffline.ItemsSource = _streamListViewModel.ItemsOffline;
 
             busyIndicatorOnline.Visibility = Visibility.Collapsed;
             busyIndicatorOffline.Visibility = Visibility.Collapsed;
-
-            var res = refreshThread();
         }
 
-        #region Refresh
-        private async Task refreshThread()
-        {
-            while (true)
-            {
-                await Task.Delay(refreshInterval * 1000);
-
-                foreach (StreamItem item in itemsOnline)
-                    refreshStreamItem(item);
-
-                foreach (StreamItem item in itemsOffline)
-                    refreshStreamItem(item);
-
-                itemsOnline.Sort();
-                itemsOffline.Sort(item => item.DisplayName);
-            }
-        }
-
-        private void refreshAllItems()
-        {
-            if (streamList.IsVisible)
-            {
-                foreach (StreamItem item in itemsOnline)
-                    refreshStreamItem(item);
-
-                foreach (StreamItem item in itemsOffline)
-                    refreshStreamItem(item);
-            }
-            else if (gameView.IsVisible)
-            {
-                foreach (StreamItem item in gameStreams)
-                    populateGameStreams(directoryHeader.Content.ToString());
-            }
-            else if (channelsView.IsVisible)
-            {
-                foreach (StreamItem item in channels)
-                    populateChannelsList();
-            }
-        }
-
-        private async Task refreshStreamItem(StreamItem item)
-        {
-            object lockObject;
-
-            var stream = await StreamItemHelper.getStream(item.Name);
-            Channel channel = null;
-            if (stream != null)
-            {
-                channel = stream.channel;
-                lockObject = lockObjectOnline;
-
-                if (item.Viewers == "Offline")
-                {
-                    lock (lockObjectOffline)
-                        itemsOffline.Remove(item);
-
-                    lock (lockObjectOnline)
-                        ItemsOnline.Add(item);
-                }
-            }
-            else
-            {
-                channel = await StreamItemHelper.getChannel(item.Name);
-                lockObject = lockObjectOffline;
-
-                if (item.Viewers != "Offline")
-                {
-                    lock (lockObjectOnline)
-                        ItemsOnline.Remove(item);
-
-                    lock (lockObjectOffline)
-                        itemsOffline.Add(item);
-                }
-            }
-
-            lock (lockObject)
-            {
-                item.CurGame = stream != null ? stream.game : channel?.game;
-                item.Preview = StreamItemHelper.getPreview(stream, channel);
-                item.Viewers = stream != null ? stream.viewers.Value.ToString() : "Offline";
-            }
-        }
-        #endregion
         #region Stream List
         private async void streamListAddButton_Click(object sender, RoutedEventArgs e)
         {
@@ -348,12 +182,6 @@ namespace Twitch_Viewer
                 settings.StreamStats.Add(stats);
             }
 
-            foreach (StreamItem item in itemsOnline)
-                refreshStreamItem(item);
-
-            foreach (StreamItem item in itemsOffline)
-                refreshStreamItem(item);
-
             await addStreamItem(stats);
         }
 
@@ -362,10 +190,10 @@ namespace Twitch_Viewer
             var item = (sender as Button).DataContext as StreamItem;
             var name = item.Name;
 
-            if (itemsOnline.Contains(item))
-                itemsOnline.Remove(item);
-            else if (itemsOffline.Contains(item))
-                itemsOffline.Remove(item);
+            if (_streamListViewModel.ItemsOnline.Contains(item))
+                _streamListViewModel.ItemsOnline.Remove(item);
+            else if (_streamListViewModel.ItemsOffline.Contains(item))
+                _streamListViewModel.ItemsOffline.Remove(item);
 
             settings.StreamStats.FirstOrDefault(stats => stats.Name == name).Saved = false;
         }
@@ -373,7 +201,7 @@ namespace Twitch_Viewer
         private void watchButton_Click(object sender, RoutedEventArgs e)
         {
             var link = getStreamLink();
-            string args = LivestreamerArgs != null && LivestreamerArgs.Length != 0 ? $"{LivestreamerArgs} {link} {SelectedQuality}" : $"{link} {SelectedQuality}";
+            string args = _settingsViewModel.LivestreamerArgs != null && _settingsViewModel.LivestreamerArgs.Length != 0 ? $"{_settingsViewModel.LivestreamerArgs} {link} {SelectedQuality}" : $"{link} {SelectedQuality}";
 
             Process p = Process.Start(@"C:\program files (x86)\Livestreamer\livestreamer.exe", args);
         }
@@ -383,14 +211,14 @@ namespace Twitch_Viewer
         {
             await populateGameList();
 
-            gameList.ItemsSource = Games;
+            gameList.ItemsSource = _directoryViewModel.Games;
         }
 
         private async void gameItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             var item = (GameItem)(sender as Grid).DataContext;
 
-            gameStreams.Clear();
+            _directoryViewModel.GameStreams.Clear();
 
             gameViewBackButton.Visibility = Visibility.Visible;
             directoryHeader.Content = item.FullName;
@@ -408,7 +236,7 @@ namespace Twitch_Viewer
 
             await populateGameStreams(item.FullName);
 
-            streamListDirectory.ItemsSource = gameStreams;
+            streamListDirectory.ItemsSource = _directoryViewModel.GameStreams;
         }
 
         private void directoryHeader_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -438,12 +266,12 @@ namespace Twitch_Viewer
             if (offset == 0)
             {
                 gameListOffset = 0;
-                games.Clear();
+                _directoryViewModel.Games.Clear();
             }
 
             foreach (Game game in list)
             {
-                games.AddIfNew<GameItem>(new GameItem(game.name, DirectoryHandler.getBoxImage(game), game.viewers.Value.ToString()));
+                _directoryViewModel.Games.AddIfNew<GameItem>(new GameItem(game.name, DirectoryHandler.getBoxImage(game), game.viewers.Value.ToString()));
             }
 
             gameListOffset += 25;
@@ -460,7 +288,7 @@ namespace Twitch_Viewer
 
             foreach (TwixelAPI.Stream stream in list)
             {
-                gameStreams.AddIfNew<StreamItem>(new StreamItem(stream.channel.name, stream.channel.displayName, stream.game, StreamItemHelper.getPreview(stream, stream.channel), stream.viewers.Value.ToString()));
+                _directoryViewModel.GameStreams.AddIfNew<StreamItem>(new StreamItem(stream.channel.name, stream.channel.displayName, stream.game, StreamItemHelper.getPreview(stream, stream.channel), stream.viewers.Value.ToString()));
             }
 
             gameStreamsOffset += 25;
@@ -474,7 +302,7 @@ namespace Twitch_Viewer
         {
             await populateChannelsList();
 
-            channelsListDirectory.ItemsSource = Channels;
+            channelsListDirectory.ItemsSource = _channelListViewModel.Channels;
         }
 
         private async void channelsTab_SelectorSelected(object sender, RoutedEventArgs e)
@@ -495,12 +323,12 @@ namespace Twitch_Viewer
             if (offset == 0)
             {
                 channelsOffset = 0;
-                channels.Clear();
+                _channelListViewModel.Channels.Clear();
             }
 
             foreach (TwixelAPI.Stream stream in list)
             {
-                channels.AddIfNew<StreamItem>(new StreamItem(stream.channel.name, stream.channel.displayName, stream.game, StreamItemHelper.getPreview(stream, stream.channel), stream.viewers.Value.ToString()));
+                _channelListViewModel.Channels.AddIfNew<StreamItem>(new StreamItem(stream.channel.name, stream.channel.displayName, stream.game, StreamItemHelper.getPreview(stream, stream.channel), stream.viewers.Value.ToString()));
             }
 
             channelsOffset += 25;
@@ -513,12 +341,12 @@ namespace Twitch_Viewer
         {
             if (text.Length != 0)
             {
-                var filtered = games.Where(game => game.FullName.ToLower().StartsWith(text.ToLower()));
-                GamesFiltered = new ObservableCollection<GameItem>(filtered);
-                gameList.ItemsSource = GamesFiltered;
+                var filtered = _directoryViewModel.Games.Where(game => game.FullName.ToLower().StartsWith(text.ToLower()));
+                _directoryViewModel.GamesFiltered = new ObservableCollection<GameItem>(filtered);
+                gameList.ItemsSource = _directoryViewModel.GamesFiltered;
             }
             else
-                gameList.ItemsSource = Games;
+                gameList.ItemsSource = _directoryViewModel.Games;
         }
 
         private async Task filterStreamList(string text, ObservableCollection<StreamItem> listToFilter, ItemsControl listToChange)
@@ -526,8 +354,8 @@ namespace Twitch_Viewer
             if (text.Length != 0)
             {
                 var filtered = listToFilter.Where(stream => stream.DisplayName.ToLower().StartsWith(text.ToLower()));
-                StreamsFiltered = new ObservableCollection<StreamItem>(filtered);
-                listToChange.ItemsSource = StreamsFiltered;
+                _channelListViewModel.ChannelsFiltered = new ObservableCollection<StreamItem>(filtered);
+                listToChange.ItemsSource = _channelListViewModel.ChannelsFiltered;
             }
             else
                 listToChange.ItemsSource = listToFilter;
@@ -536,7 +364,7 @@ namespace Twitch_Viewer
         private async void textBoxChannelsFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = sender as TextBox;
-            await filterStreamList(textBox.Text, Channels, channelsListDirectory);
+            await filterStreamList(textBox.Text, _channelListViewModel.Channels, channelsListDirectory);
         }
 
         private async void textBoxDirectoryFilter_TextChanged(object sender, TextChangedEventArgs e)
@@ -545,7 +373,7 @@ namespace Twitch_Viewer
             if (gameList.IsVisible)
                 await filterGameList(textBox.Text);
             else if (streamListDirectory.IsVisible)
-                await filterStreamList(textBox.Text, GameStreams, streamListDirectory);
+                await filterStreamList(textBox.Text, _directoryViewModel.GameStreams, streamListDirectory);
         }
         #endregion
         #region Stats
@@ -732,14 +560,14 @@ namespace Twitch_Viewer
         {
             var streamItem = (StreamItem)(sender as Grid).DataContext;
 
-            streamItem.StartStream(SelectedQuality, LivestreamerArgs, this);
+            streamItem.StartStream(SelectedQuality, _settingsViewModel.LivestreamerArgs, this);
         }
 
         private void Grid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F5)
             {
-                refreshAllItems();
+                //refreshAllItems();
                 e.Handled = true;
             }
         }
@@ -780,17 +608,11 @@ namespace Twitch_Viewer
 
             if (stream != null)
             {
-                lock (lockObjectOnline)
-                {
-                    itemsOnline.Add(new StreamItem(stats.Name, displayName, stream?.game, preview, stream?.viewers.Value.ToString()));
-                }
+                _streamListViewModel.ItemsOnline.Add(new StreamItem(stats.Name, displayName, stream?.game, preview, stream?.viewers.Value.ToString()));
             }
             else
             {
-                lock (lockObjectOffline)
-                {
-                    itemsOffline.Add(new StreamItem(stats.Name, displayName, stream?.game, preview, "Offline"));
-                }
+                _streamListViewModel.ItemsOffline.Add(new StreamItem(stats.Name, displayName, stream?.game, preview, "Offline"));
             }
         }
 
@@ -826,7 +648,7 @@ namespace Twitch_Viewer
 
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            FillHeight = this.ActualHeight - tabControl.Items.Count * 40.0 + 4;
+            _viewModel.FillHeight = this.ActualHeight - tabControl.Items.Count * 40.0 + 4;
         }
 
         #region Debug Options

@@ -12,7 +12,7 @@
         <TabControl x:Name="tabControl" BorderThickness="0" Margin="-2,-3,0,0" Padding="0" Background="Transparent" TabStripPlacement="Left">
 
             <!-- Saved Stream List -->
-            <TabItem x:Name="streamlistTab">
+            <TabItem x:Name="streamListTab">
                 <TabItem.Header>
                     <Grid ToolTipService.InitialShowDelay="0">
                         <Grid.ToolTip>
