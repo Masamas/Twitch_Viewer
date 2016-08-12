@@ -21,6 +21,8 @@ namespace Twitch_Viewer
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private MainWindowViewModel _viewModel;
+
         private Twixel twixel;
         public static Settings settings;
 
@@ -141,16 +143,12 @@ namespace Twitch_Viewer
         }
 
         private int refreshInterval = 60;
-        public string RefreshInterval
+        public int RefreshInterval
         {
-            get { return refreshInterval.ToString(); }
+            get { return refreshInterval; }
             set
             {
-                var tmp = int.Parse(value);
-                if (tmp < 5)
-                    refreshInterval = 5;
-                else
-                    refreshInterval = tmp;
+                refreshInterval = value;
             }
         }
         #endregion
@@ -181,6 +179,8 @@ namespace Twitch_Viewer
 
         public MainWindow()
         {
+            _viewModel = new MainWindowViewModel(this);
+
             settings = ((App)Application.Current).settings;
 
             refreshInterval = settings.RefreshInterval;
@@ -196,7 +196,7 @@ namespace Twitch_Viewer
 
             InitializeComponent();
 
-            this.DataContext = this;
+            base.DataContext = _viewModel;
 
             statsTab.DataContext = settings;
 

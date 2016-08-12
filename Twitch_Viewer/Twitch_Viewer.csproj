@@ -101,6 +101,7 @@
     </ApplicationDefinition>
     <Compile Include="DirectoryHandler.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Types\GameItem.cs" />
     <Compile Include="Types\GameStatsItem.cs" />
     <Compile Include="Settings.cs" />
