@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="Twitch_Viewer.DirectoryView.DirectoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Twitch_Viewer.DirectoryView"
+             xmlns:main="clr-namespace:Twitch_Viewer"
+             xmlns:hammer="clr-namespace:Hammer.SpinningWheel;assembly=Hammer.SpinningWheel"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <TabItem>
+        <TabItem.Header>
+            <Grid ToolTipService.InitialShowDelay="0">
+                <Grid.ToolTip>
+                    <ToolTip Content="Directory" Placement="Right" OverridesDefaultStyle="True" HasDropShadow="True" VerticalOffset="3">
+                        <ToolTip.Template>
+                            <ControlTemplate TargetType="ToolTip">
+                                <Grid>
+                                    <Polygon Stroke="Black" StrokeThickness="1" Fill="White" Points="0,15 8,0 100,0 100,30 8,30" />
+                                    <TextBlock Text="{TemplateBinding Content}" Margin="10, 5, 5, 3" FontSize="14" FontFamily="Arial"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </ToolTip.Template>
+                    </ToolTip>
+                </Grid.ToolTip>
+                <Rectangle Fill="Transparent" />
+                <Image Source="/Twitch_Viewer;component/imageResources/Directory.png" Stretch="None" />
+            </Grid>
+        </TabItem.Header>
+        <Grid x:Name="directory">
+            <StackPanel Orientation="Horizontal" Height="43" VerticalAlignment="Top">
+                <Image x:Name="gameViewBackButton" Source="/Twitch_Viewer;component/imageResources/Back.png" Stretch="None" Visibility="Collapsed" MouseLeftButtonUp="directoryHeader_MouseLeftButtonUp" />
+                <Label x:Name="directoryHeader" Content="Games" FontFamily="Arial Black" FontWeight="Bold" FontSize="18" Margin="0,5,0,0" MouseLeftButtonUp="directoryHeader_MouseLeftButtonUp"/>
+            </StackPanel>
+            <ComboBox Margin="0,10,210,0" VerticalAlignment="Top" ItemsSource="{Binding Quality}" Text="{Binding SelectedQuality}" SelectedIndex="3" FontWeight="Bold" HorizontalAlignment="Right" Width="80"/>
+            <Label x:Name="labelDirectoryFilter" Content="Filter:" FontFamily="Arial" FontWeight="Bold" Margin="0,10,155,0" HorizontalAlignment="Right" VerticalAlignment="Top" />
+            <TextBox x:Name="textBoxDirectoryFilter" Height="23" Margin="0,10,30,0" Width="120" HorizontalAlignment="Right" VerticalAlignment="Top" TextChanged="textBoxDirectoryFilter_TextChanged" />
+            <ScrollViewer x:Name="directoryScrollViewer" Margin="0,43,0,0" VerticalScrollBarVisibility="Auto" ScrollChanged="ScrollViewer_ScrollChanged">
+                <Grid>
+
+                    <!-- Games List -->
+                    <StackPanel x:Name="directoryView">
+                        <ItemsControl x:Name="gameList" Margin="-10,0,0,35" Initialized="gameList_Initialized" RequestBringIntoView="general_RequestBringIntoView">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Width="136" Height="240" Background="Transparent" Margin="16,10,16,0" MouseLeftButtonUp="gameItem_MouseLeftButtonUp">
+                                        <Image Source="{Binding Preview}" MaxWidth="136" MaxHeight="190" VerticalAlignment="Top" Panel.ZIndex="1" >
+                                            <Image.Effect>
+                                                <DropShadowEffect/>
+                                            </Image.Effect>
+                                        </Image>
+                                        <Label Content="{Binding Name}" FontWeight="Bold" Margin="0,0,0,25" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+                                        <Image Source="/Twitch_Viewer;component/imageResources/Viewer.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+                                        <Label Content="{Binding Viewers}" FontFamily="Arial Black" Foreground="Red" Margin="18,0,0,5" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="1"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <hammer:SpinningWheel x:Name="busyIndicatorDirectory" Speed="0.7" DotRadius="3" Radius="15" Margin="0,40,0,40"/>
+                    </StackPanel>
+
+                    <!-- Channels for single game -->
+                    <StackPanel x:Name="gameView" Visibility="Collapsed">
+                        <ItemsControl x:Name="streamListDirectory" Margin="0,0,0,0" RequestBringIntoView="general_RequestBringIntoView">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Width="320" Height="225" Background="Transparent" Margin="5,10,5,0" MouseLeftButtonUp="streamItem_MouseLeftButtonUp">
+                                        <Image Source="{Binding Preview}" MaxWidth="320" MaxHeight="180" VerticalAlignment="Top" Panel.ZIndex="1" >
+                                            <Image.Effect>
+                                                <DropShadowEffect/>
+                                            </Image.Effect>
+                                        </Image>
+                                        <Image Source="/Twitch_Viewer;component/imageResources/HeartBorder.png" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,45" Panel.ZIndex="2" Visibility="{Binding SavedVisibility}" />
+                                        <Label Content="{Binding DisplayName}" FontWeight="Bold" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+                                        <Button FontFamily="Arial Black" BorderBrush="{x:Null}" Background="{x:Null}" Width="20" Height="20" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="addButton_Click" >
+                                            <Button.Content>
+                                                <Image Source="/Twitch_Viewer;component/imageResources/HeartBorder.png" Stretch="Fill" />
+                                            </Button.Content>
+                                        </Button>
+                                        <Image Source="/Twitch_Viewer;component/imageResources/Viewer.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,20"/>
+                                        <Label Content="{Binding Viewers}" FontFamily="Arial Black" Foreground="Red" Margin="18,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="1"/>
+                                        <Label Content="{Binding CurGame}" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <hammer:SpinningWheel x:Name="busyIndicatorGameList" Speed="0.7" DotRadius="3" Radius="15" Margin="0,40,0,40"/>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+    </TabItem>
+</UserControl>

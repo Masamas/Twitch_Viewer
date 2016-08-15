@@ -109,6 +109,9 @@
     <Compile Include="SettingsViewModel.cs" />
     <Compile Include="StreamList.cs" />
     <Compile Include="StreamListViewModel.cs" />
+    <Compile Include="StyleResources\TestItem.xaml.cs">
+      <DependentUpon>TestItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Types\GameItem.cs" />
     <Compile Include="Types\GameStatsItem.cs" />
     <Compile Include="Settings.cs" />
@@ -143,6 +146,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="StyleResources\TabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StyleResources\TestItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

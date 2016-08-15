@@ -115,7 +115,8 @@ namespace Twitch_Viewer
             base.DataContext = _viewModel;
 
             statsTab.DataContext = _settingsViewModel;
-            streamListTab.DataContext = _streamListViewModel;
+            streamListTab.OnlineStreamItems = _streamListViewModel.ItemsOnline;
+            streamListTab.OfflineStreamItems = _streamListViewModel.ItemsOffline;
             directoryTab.DataContext = _directoryViewModel;
             channelsTab.DataContext = _channelListViewModel;
 
@@ -139,8 +140,7 @@ namespace Twitch_Viewer
 
             var tasks = new List<Task>();
 
-            busyIndicatorOnline.Visibility = Visibility.Visible;
-            busyIndicatorOffline.Visibility = Visibility.Visible;
+            streamListTab.IsBusy = Visibility.Visible;
 
             foreach (StreamStatsItem stats in settings.StreamStats)
             {
@@ -150,14 +150,10 @@ namespace Twitch_Viewer
 
             await Task.WhenAll(tasks);
 
+            streamListTab.IsBusy = Visibility.Collapsed;
+
             _streamListViewModel.ItemsOnline.Sort();
             _streamListViewModel.ItemsOffline.Sort(item => item.DisplayName);
-
-            streamListOnline.ItemsSource = _streamListViewModel.ItemsOnline;
-            streamListOffline.ItemsSource = _streamListViewModel.ItemsOffline;
-
-            busyIndicatorOnline.Visibility = Visibility.Collapsed;
-            busyIndicatorOffline.Visibility = Visibility.Collapsed;
         }
 
         #region Stream List
@@ -618,7 +614,7 @@ namespace Twitch_Viewer
 
         private string getStreamLink()
         {
-            var link = textBoxStreamLink.Text;
+            var link = streamListTab.StreamLink;
 
             if (link.StartsWith("http://"))
                 link = link.Substring(7);
@@ -633,7 +629,7 @@ namespace Twitch_Viewer
 
         private string getStreamName()
         {
-            var input = textBoxStreamLink.Text;
+            var input = streamListTab.StreamLink;
 
             input = input.Substring(input.LastIndexOf('/') + 1);
 

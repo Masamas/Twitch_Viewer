@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Twitch_Viewer"
+        xmlns:styles="clr-namespace:Twitch_Viewer.StyleResources"
         xmlns:Properties="clr-namespace:Twitch_Viewer.Properties" x:Name="window" x:Class="Twitch_Viewer.MainWindow" DataContext="{Binding ElementName=window}"
         xmlns:hammer="clr-namespace:Hammer.SpinningWheel;assembly=Hammer.SpinningWheel"
         mc:Ignorable="d"
@@ -12,7 +13,7 @@
         <TabControl x:Name="tabControl" BorderThickness="0" Margin="-2,-3,0,0" Padding="0" Background="Transparent" TabStripPlacement="Left">
 
             <!-- Saved Stream List -->
-            <TabItem x:Name="streamListTab">
+            <TabItem>
                 <TabItem.Header>
                     <Grid ToolTipService.InitialShowDelay="0">
                         <Grid.ToolTip>
@@ -28,75 +29,10 @@
                             </ToolTip>
                         </Grid.ToolTip>
                         <Rectangle Fill="Transparent" />
-                        <Image Source="imageResources/Home.png" Stretch="None" />
+                        <Image Source="/Twitch_Viewer;component/imageResources/Home.png" Stretch="None" />
                     </Grid>
                 </TabItem.Header>
-                <Grid x:Name="streamList">
-                    <Label Content="Saved Streams" FontFamily="Arial Black" FontWeight="Bold" FontSize="18" Margin="0,5,0,0"/>
-                    <ScrollViewer Margin="0,43,0,43" VerticalScrollBarVisibility="Auto" ScrollChanged="ScrollViewer_ScrollChanged">
-                        <StackPanel>
-                            <Label Content="Online" FontFamily="Arial" FontWeight="Bold" FontSize="16"/>
-                            <Rectangle Fill="Black" Height="1" Margin="5,0,0,0"/>
-                            <hammer:SpinningWheel x:Name="busyIndicatorOnline" Speed="0.7" DotRadius="3" Radius="15" Margin="0,40,0,40"/>
-                            <ItemsControl x:Name="streamListOnline" Margin="0,0,0,35" RequestBringIntoView="general_RequestBringIntoView">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Width="320" Height="225" Background="Transparent" Margin="5,10,5,0" MouseLeftButtonUp="streamItem_MouseLeftButtonUp">
-                                            <Image Source="{Binding Preview}" MaxWidth="320" MaxHeight="180" VerticalAlignment="Top" Panel.ZIndex="1" >
-                                                <Image.Effect>
-                                                    <DropShadowEffect/>
-                                                </Image.Effect>
-                                            </Image>
-                                            <Label Content="{Binding DisplayName}" FontWeight="Bold" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-                                            <Button Content="X" FontFamily="Arial Black" BorderBrush="{x:Null}" Background="{x:Null}" Width="20" Height="20" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="deleteButton_Click"/>
-                                            <Image Source="imageResources/Viewer.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,20"/>
-                                            <Label Content="{Binding Viewers}" FontFamily="Arial Black" Foreground="Red" Margin="18,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="1"/>
-                                            <Label Content="{Binding CurGame}" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                            <Label Content="Offline" FontFamily="Arial" FontWeight="Bold" FontSize="16"/>
-                            <Rectangle Fill="Black" Height="1" Margin="5,0,0,0"/>
-                            <hammer:SpinningWheel x:Name="busyIndicatorOffline" Speed="0.7" DotRadius="3" Radius="15" Margin="0,40,0,40"/>
-                            <ItemsControl x:Name="streamListOffline" RequestBringIntoView="general_RequestBringIntoView">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Width="320" Height="225" Background="Transparent" Margin="5,10,5,0" MouseLeftButtonUp="streamItem_MouseLeftButtonUp">
-                                            <Image Source="{Binding Preview}" MaxWidth="320" MaxHeight="180" VerticalAlignment="Top" Panel.ZIndex="1" >
-                                                <Image.Effect>
-                                                    <DropShadowEffect/>
-                                                </Image.Effect>
-                                            </Image>
-                                            <Label Content="{Binding DisplayName}" FontWeight="Bold" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-                                            <Button Content="X" FontFamily="Arial Black" BorderBrush="{x:Null}" Background="{x:Null}" Width="20" Height="20" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="deleteButton_Click"/>
-                                            <Image Source="imageResources/Viewer.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,20"/>
-                                            <Label Content="{Binding Viewers}" FontFamily="Arial Black" Foreground="Red" Margin="18,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="1"/>
-                                            <Label Content="{Binding CurGame}" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </ScrollViewer>
-                    <Border HorizontalAlignment="Left" Height="23" Margin="5,0,0,10" VerticalAlignment="Bottom" Width="70">
-                        <TextBlock x:Name="textBlockStreamLink" TextWrapping="NoWrap" Text="Streamlink:" VerticalAlignment="Center"/>
-                    </Border>
-                    <TextBox x:Name="textBoxStreamLink" Height="23" Margin="80,0,217,10" VerticalAlignment="Bottom"/>
-                    <ComboBox Margin="0,0,120,10" VerticalAlignment="Bottom" ItemsSource="{Binding Quality}" Text="{Binding SelectedQuality}" SelectedIndex="3" FontWeight="Bold" HorizontalAlignment="Right" Width="80"/>
-                    <Button x:Name="buttonWatch" Content="Watch!" HorizontalAlignment="Right" Margin="0,0,40,10" VerticalAlignment="Bottom" Width="75" Click="watchButton_Click"/>
-                    <Button x:Name="buttonStreamListAdd" Content="+" Margin="0,0,10,10" VerticalAlignment="Bottom" Click="streamListAddButton_Click" HorizontalAlignment="Right" Width="25"/>
-                </Grid>
+                <styles:TestItem x:Name="streamListTab" />
             </TabItem>
 
             <!-- Directory -->
