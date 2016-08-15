@@ -8,16 +8,16 @@ namespace Twitch_Viewer
     public partial class App : Application
     {
         public Settings settings;
-        private SettingsHelper settingsHelper;
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            settingsHelper = new SettingsHelper();
+            SettingsHelper settingsHelper = new SettingsHelper();
             settings = settingsHelper.Load();
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            SettingsHelper settingsHelper = new SettingsHelper();
             settingsHelper.Save(settings);
         }
     }

@@ -220,8 +220,7 @@ namespace Twitch_Viewer
 
             var tasks = new List<Task>();
 
-            busyIndicatorOnline.Visibility = Visibility.Visible;
-            busyIndicatorOffline.Visibility = Visibility.Visible;
+            streamListTab.IsBusy = Visibility.Visible;
 
             foreach (StreamStatsItem stats in settings.StreamStats)
             {
@@ -234,11 +233,10 @@ namespace Twitch_Viewer
             itemsOnline.Sort();
             itemsOffline.Sort(item => item.DisplayName);
 
-            streamListOnline.ItemsSource = ItemsOnline;
-            streamListOffline.ItemsSource = ItemsOffline;
+            streamListTab.OnlineStreamItems = ItemsOnline;
+            streamListTab.OfflineStreamItems = ItemsOffline;
 
-            busyIndicatorOnline.Visibility = Visibility.Collapsed;
-            busyIndicatorOffline.Visibility = Visibility.Collapsed;
+            streamListTab.IsBusy = Visibility.Collapsed;
 
             var res = refreshThread();
         }
@@ -263,7 +261,7 @@ namespace Twitch_Viewer
 
         private void refreshAllItems()
         {
-            if (streamList.IsVisible)
+            if (streamListTab.IsVisible)
             {
                 foreach (StreamItem item in itemsOnline)
                     refreshStreamItem(item);
@@ -796,7 +794,7 @@ namespace Twitch_Viewer
 
         private string getStreamLink()
         {
-            var link = textBoxStreamLink.Text;
+            var link = streamListTab.StreamLink;
 
             if (link.StartsWith("http://"))
                 link = link.Substring(7);
@@ -811,7 +809,7 @@ namespace Twitch_Viewer
 
         private string getStreamName()
         {
-            var input = textBoxStreamLink.Text;
+            var input = streamListTab.StreamLink;
 
             input = input.Substring(input.LastIndexOf('/') + 1);
 
