@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Twitch_Viewer
+namespace Twitch_Viewer.Types
 {
     [Serializable, XmlRoot("Stats")]
     public abstract class StatsItem : INotifyPropertyChanged, IComparable

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
-namespace Twitch_Viewer
+namespace Twitch_Viewer.Types
 {
     public class GameItem : IComparable, INotifyPropertyChanged
     {

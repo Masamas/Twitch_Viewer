@@ -6,10 +6,13 @@ using System.Reflection;
 using System.Windows.Media.Imaging;
 using System.Windows;
 
-namespace Twitch_Viewer
+namespace Twitch_Viewer.Types
 {
     public class StreamItem : IComparable , INotifyPropertyChanged
     {
+        private const string heartImageBlack = "/Twitch_Viewer;component/imageResources/HeartBlack.png";
+        private const string heartImageRed = "/Twitch_Viewer;component/imageResources/HeartBorder.png";
+
         private string name;
         public string Name { get { return name; } set { name = value; OnPropertyChanged(MethodInfo.GetCurrentMethod()); } }
         private string displayName;
@@ -23,14 +26,14 @@ namespace Twitch_Viewer
         public StreamStatsItem StreamStats { get { return MainWindow.settings.StreamStats.FirstOrDefault(stats => stats.Name == this.name); } }
         public GameStatsItem GameStats { get { return MainWindow.settings.GameStats.FirstOrDefault(stats => stats.Name == this.curGame); } }
 
-        public Visibility SavedVisibility
+        public string HeartImage
         {
             get
             {
                 if (StreamStats == null)
-                    return Visibility.Collapsed;
+                    return heartImageBlack;
 
-                return StreamStats.Saved ? Visibility.Visible : Visibility.Collapsed;
+                return StreamStats.Saved ? heartImageRed : heartImageBlack;
             }
         }
 
@@ -43,6 +46,9 @@ namespace Twitch_Viewer
             this.curGame = curGame;
             this.preview = preview;
             this.viewers = viewers;
+
+            if (StreamStats != null)
+                StreamStats.PropertyChanged += ItemStateChanged;
         }
 
         public void StartStream(string quality, string livestreamerArgs, MainWindow startWindow)
@@ -117,6 +123,12 @@ namespace Twitch_Viewer
         protected void OnPropertyChanged(MethodBase methodBase)
         {
             OnPropertyChanged(methodBase.Name.Substring(4));
+        }
+
+        private void ItemStateChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Saved")
+                OnPropertyChanged("HeartImage");
         }
 
         public int CompareTo(object obj)

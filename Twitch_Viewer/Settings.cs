@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Data;
 using System.Xml;
 using System.Xml.Serialization;
+using Twitch_Viewer.Types;
 
 namespace Twitch_Viewer
 {

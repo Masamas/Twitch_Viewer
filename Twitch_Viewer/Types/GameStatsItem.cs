@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Twitch_Viewer
+namespace Twitch_Viewer.Types
 {
     [Serializable, XmlRoot("GameStats")]
     public class GameStatsItem : StatsItem

@@ -13,6 +13,7 @@ using TwixelAPI;
 using System.ComponentModel;
 using System.Collections.Specialized;
 using System.Windows.Media.Imaging;
+using Twitch_Viewer.Types;
 
 namespace Twitch_Viewer
 {
@@ -336,7 +337,28 @@ namespace Twitch_Viewer
 
             var name = getStreamName();
 
-            var stats = settings.StreamStats.FirstOrDefault(s => s.Name == name);
+            addNewStreamItem(name);
+        }
+
+        private void deleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var item = (sender as Button).DataContext as StreamItem;
+            var name = item.Name;
+
+            removeStreamItem(item);
+        }
+
+        private void watchButton_Click(object sender, RoutedEventArgs e)
+        {
+            var link = getStreamLink();
+            string args = LivestreamerArgs != null && LivestreamerArgs.Length != 0 ? $"{LivestreamerArgs} {link} {SelectedQuality}" : $"{link} {SelectedQuality}";
+
+            Process p = Process.Start(@"C:\program files (x86)\Livestreamer\livestreamer.exe", args);
+        }
+
+        private void addNewStreamItem(string name)
+        {
+            StreamStatsItem stats = settings.StreamStats.FirstOrDefault(s => s.Name == name);
 
             if (stats?.Saved == true)
                 return;
@@ -348,34 +370,48 @@ namespace Twitch_Viewer
                 settings.StreamStats.Add(stats);
             }
 
-            foreach (StreamItem item in itemsOnline)
-                refreshStreamItem(item);
+            if (!stats.Saved)
+                stats.Saved = true;
 
-            foreach (StreamItem item in itemsOffline)
-                refreshStreamItem(item);
-
-            await addStreamItem(stats);
+            addStreamItem(stats);
         }
 
-        private void deleteButton_Click(object sender, RoutedEventArgs e)
+        private async Task addStreamItem(StreamStatsItem stats)
         {
-            var item = (sender as Button).DataContext as StreamItem;
-            var name = item.Name;
+            TwixelAPI.Stream stream = await StreamItemHelper.getStream(stats.Name);
+            TwixelAPI.Channel channel = stream != null ? stream.channel : await StreamItemHelper.getChannel(stats.Name);
 
-            if (itemsOnline.Contains(item))
-                itemsOnline.Remove(item);
-            else if (itemsOffline.Contains(item))
-                itemsOffline.Remove(item);
+            var preview = StreamItemHelper.getPreview(stream, channel);
 
-            settings.StreamStats.FirstOrDefault(stats => stats.Name == name).Saved = false;
+            string displayName = channel != null ? channel.displayName : stats.Name;
+
+            if (stream != null)
+            {
+                lock (lockObjectOnline)
+                {
+                    itemsOnline.Add(new StreamItem(stats.Name, displayName, stream?.game, preview, stream?.viewers.Value.ToString()));
+                }
+            }
+            else
+            {
+                lock (lockObjectOffline)
+                {
+                    itemsOffline.Add(new StreamItem(stats.Name, displayName, stream?.game, preview, "Offline"));
+                }
+            }
         }
 
-        private void watchButton_Click(object sender, RoutedEventArgs e)
+        private void removeStreamItem(StreamItem item)
         {
-            var link = getStreamLink();
-            string args = LivestreamerArgs != null && LivestreamerArgs.Length != 0 ? $"{LivestreamerArgs} {link} {SelectedQuality}" : $"{link} {SelectedQuality}";
+            var onlineItem = itemsOnline.SingleOrDefault(online => online.Name == item.Name);
+            var offlineItem = itemsOffline.SingleOrDefault(offline => offline.Name == item.Name);
 
-            Process p = Process.Start(@"C:\program files (x86)\Livestreamer\livestreamer.exe", args);
+            if (onlineItem != null)
+                itemsOnline.Remove(onlineItem);
+            else if (offlineItem != null)
+                itemsOffline.Remove(offlineItem);
+
+            item.StreamStats.Saved = false;
         }
         #endregion
         #region Directory
@@ -708,24 +744,15 @@ namespace Twitch_Viewer
         }
         #endregion
 
-        private async void addButton_Click(object sender, RoutedEventArgs e)
+        private void addButton_Click(object sender, RoutedEventArgs e)
         {
             var item = (sender as Button).DataContext as StreamItem;
             var name = item.Name;
 
-            var stats = settings.StreamStats.FirstOrDefault(s => s.Name == name);
-
-            if (stats?.Saved == true)
-                return;
-
-            if (stats == null)
-            {
-                StreamStatsItem newStats = new StreamStatsItem(name, true);
-                stats = newStats;
-                settings.StreamStats.Add(stats);
-            }
-
-            await addStreamItem(stats);
+            if (!(item.StreamStats?.Saved == true))
+                addNewStreamItem(name);
+            else
+                removeStreamItem(item);
         }
 
         private void streamItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -763,35 +790,6 @@ namespace Twitch_Viewer
         private void general_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
             e.Handled = true;
-        }
-
-        private async Task addStreamItem(StreamStatsItem stats)
-        {
-            TwixelAPI.Stream stream = await StreamItemHelper.getStream(stats.Name);
-            TwixelAPI.Channel channel = null;
-            if (stream != null)
-                channel = stream.channel;
-            else
-                channel = await StreamItemHelper.getChannel(stats.Name);
-
-            var preview = StreamItemHelper.getPreview(stream, channel);
-
-            string displayName = channel != null ? channel.displayName : stats.Name;
-
-            if (stream != null)
-            {
-                lock (lockObjectOnline)
-                {
-                    itemsOnline.Add(new StreamItem(stats.Name, displayName, stream?.game, preview, stream?.viewers.Value.ToString()));
-                }
-            }
-            else
-            {
-                lock (lockObjectOffline)
-                {
-                    itemsOffline.Add(new StreamItem(stats.Name, displayName, stream?.game, preview, "Offline"));
-                }
-            }
         }
 
         private string getStreamLink()
