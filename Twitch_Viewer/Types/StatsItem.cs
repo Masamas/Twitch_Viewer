@@ -103,7 +103,10 @@ namespace Twitch_Viewer.Types
 
             var res = ((double)dayStats / (double)ViewTimeData.Count);
 
-            return res;
+            if (!double.IsNaN(res))
+                return res;
+            else
+                return 0.0;
         }
     }
 
