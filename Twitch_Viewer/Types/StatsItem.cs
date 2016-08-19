@@ -27,7 +27,6 @@ namespace Twitch_Viewer.Types
         public TimeSpan ViewTime { get { return viewTime; } set { viewTime = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); } }
         public string ViewTimeString { get { return XmlConvert.ToString(viewTime); } set { viewTime = XmlConvert.ToTimeSpan(value); OnPropertyChanged(MethodBase.GetCurrentMethod()); } }
         public int ViewCount { get { return viewCount; } set { viewCount = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); } }
-        [XmlIgnore]
         public ObservableCollection<ViewTimeData> ViewTimeData { get { viewTimeData.Sort(item => item.Start); return viewTimeData; } set { viewTimeData = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); BindingOperations.EnableCollectionSynchronization(ViewTimeData, lockObjectViewTimeData); } }
 
         #region GraphProperties
@@ -110,13 +109,17 @@ namespace Twitch_Viewer.Types
 
     public struct ViewTimeData
     {
+        private TimeSpan _duration;
+
         public DateTime Start { get; set; }
-        public TimeSpan Duration { get; set; }
+        [XmlIgnore]
+        public TimeSpan Duration { get { return _duration; } set { _duration = value; } }
+        public string DurationString { get { return XmlConvert.ToString(_duration); } set { _duration = XmlConvert.ToTimeSpan(value); } }
 
         public ViewTimeData(DateTime start, TimeSpan duration)
         {
-            this.Start = start;
-            this.Duration = duration;
+            Start = start;
+            _duration = duration;
         }
     };
 }
