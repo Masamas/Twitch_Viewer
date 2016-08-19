@@ -53,6 +53,8 @@ namespace Twitch_Viewer.Types
 
         public void StartStream(string quality, string livestreamerArgs, MainWindow startWindow)
         {
+            DateTime start = DateTime.Now;
+
             var link = "twitch.tv/" + Name;
 
             if (StreamStats == null)
@@ -77,7 +79,7 @@ namespace Twitch_Viewer.Types
             p.OutputDataReceived += new DataReceivedEventHandler(loadingDialog.UpdateStatusText);
             stopwatch.Start();
             p.Exited += (pSender, pArgs) => stopwatch.Stop();
-            p.Exited += (pSender, pArgs) => addViewStats(stopwatch.Elapsed);
+            p.Exited += (pSender, pArgs) => addViewStats(start, stopwatch.Elapsed);
             p.Start();
             p.BeginOutputReadLine();
 
@@ -86,12 +88,13 @@ namespace Twitch_Viewer.Types
             loadingDialog.Show();
         }
 
-        private void addViewStats(TimeSpan time)
+        private void addViewStats(DateTime start, TimeSpan duration)
         {
-            var truncatedTime = new TimeSpan(time.Days, time.Hours, time.Minutes, time.Seconds + (time.Milliseconds > 500 ? 1 : 0));
+            var truncatedTime = new TimeSpan(duration.Days, duration.Hours, duration.Minutes, duration.Seconds + (duration.Milliseconds > 500 ? 1 : 0));
 
             if (MainWindow.settings.DebugStatsLimit)
             {
+                StreamStats.ViewTimeData.Add(new ViewTimeData(start, truncatedTime));
                 StreamStats.ViewTime += truncatedTime;
                 StreamStats.ViewCount++;
                 if (GameStats != null)
@@ -102,8 +105,9 @@ namespace Twitch_Viewer.Types
                 return;
             }
 
-            if (time.TotalSeconds >= 30.0)
+            if (duration.TotalSeconds >= 30.0)
             {
+                StreamStats.ViewTimeData.Add(new ViewTimeData(start, truncatedTime));
                 StreamStats.ViewTime += truncatedTime;
                 StreamStats.ViewCount++;
                 if (GameStats != null)

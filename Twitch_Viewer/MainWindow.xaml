@@ -54,6 +54,7 @@
                                             </Image>
                                             <Label Content="{Binding DisplayName}" FontWeight="Bold" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
                                             <Button Content="X" FontFamily="Arial Black" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="deleteButton_Click"/>
+                                            <Button Content="I" FontFamily="Arial Black" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,30,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="statsButton_Click" />
                                             <Image Source="imageResources/Viewer.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,20"/>
                                             <Label Content="{Binding Viewers}" FontFamily="Arial Black" Foreground="Red" Margin="18,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="1"/>
                                             <Label Content="{Binding CurGame}" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
@@ -80,6 +81,7 @@
                                             </Image>
                                             <Label Content="{Binding DisplayName}" FontWeight="Bold" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
                                             <Button Content="X" FontFamily="Arial Black" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="deleteButton_Click"/>
+                                            <Button Content="I" FontFamily="Arial Black" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,30,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="statsButton_Click" />
                                             <Image Source="imageResources/Viewer.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,20"/>
                                             <Label Content="{Binding Viewers}" FontFamily="Arial Black" Foreground="Red" Margin="18,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="1"/>
                                             <Label Content="{Binding CurGame}" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>

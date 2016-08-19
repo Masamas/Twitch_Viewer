@@ -1,0 +1,81 @@
+﻿<Window x:Class="Twitch_Viewer.StatsTest"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Twitch_Viewer"
+        mc:Ignorable="d"
+        Title="StatsTest" Height="550" Width="350">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="200" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="250" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Name" FontWeight="Bold" />
+        <Grid Grid.Row="1" Grid.Column="0">
+            <TextBlock Text="Startzeit" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <TextBlock Text="Dauer" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,18,0" />
+        </Grid>
+        <ScrollViewer Grid.Row="2" Grid.Column="0">
+            <ItemsControl ItemsSource="{Binding ViewTimeData}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <Grid Margin="0,2,0,2">
+                                <TextBlock Text="{Binding Start, StringFormat='dd.MM.yyyy H:mm'}" HorizontalAlignment="Left" />
+                                <TextBlock Text="{Binding Duration}" HorizontalAlignment="Right" />
+                            </Grid>
+                            <Rectangle Height="1" Fill="#FF8B8B8B" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <Grid Grid.Row="3" Grid.Column="0" VerticalAlignment="Bottom">
+            <TextBlock Text="Gesamtzeit" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding ViewTime}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,18,0" />
+        </Grid>
+        <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal">
+            <Grid>
+                <Rectangle Height="{Binding MondayValue}" Width="20" Fill="Black" VerticalAlignment="Bottom" Margin="0,0,0,30" />
+                <TextBlock Text="Monday" VerticalAlignment="Bottom" />
+            </Grid>
+            <Grid>
+                <Rectangle Height="{Binding TuesdayValue}" Width="20" Fill="Black" VerticalAlignment="Bottom" Margin="0,0,0,30" />
+                <TextBlock Text="Tuesday" VerticalAlignment="Bottom" />
+            </Grid>
+            <Grid>
+                <Rectangle Height="{Binding WednesdayValue}" Width="20" Fill="Black" VerticalAlignment="Bottom" Margin="0,0,0,30" />
+                <TextBlock Text="Wednesday" VerticalAlignment="Bottom" />
+            </Grid>
+            <Grid>
+                <Rectangle Height="{Binding ThursdayValue}" Width="20" Fill="Black" VerticalAlignment="Bottom" Margin="0,0,0,30" />
+                <TextBlock Text="Thursday" VerticalAlignment="Bottom" />
+            </Grid>
+            <Grid>
+                <Rectangle Height="{Binding FridayValue}" Width="20" Fill="Black" VerticalAlignment="Bottom" Margin="0,0,0,30" />
+                <TextBlock Text="Friday" VerticalAlignment="Bottom" />
+            </Grid>
+            <Grid>
+                <Rectangle Height="{Binding SaturdayValue}" Width="20" Fill="Black" VerticalAlignment="Bottom" Margin="0,0,0,30" />
+                <TextBlock Text="Saturday" VerticalAlignment="Bottom" />
+            </Grid>
+            <Grid>
+                <Rectangle Height="{Binding SundayValue}" Width="20" Fill="Black" VerticalAlignment="Bottom" Margin="0,0,0,30" />
+                <TextBlock Text="Sunday" VerticalAlignment="Bottom" />
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>
