@@ -25,13 +25,10 @@ namespace Twitch_Viewer
     {
         public StatsTest(StreamStatsItem stats)
         {
-            stats.ViewTimeData.Add(new ViewTimeData(new DateTime(2016, 08, 05, 12, 32, 55), new TimeSpan(0, 5, 20)));
-            stats.ViewTimeData.Add(new ViewTimeData(new DateTime(2016, 08, 05, 12, 55, 12), new TimeSpan(0, 10, 21)));
-            stats.ViewTimeData.Add(new ViewTimeData(new DateTime(2016, 08, 05, 16, 22, 37), new TimeSpan(0, 45, 40)));
-            stats.ViewTimeData.Add(new ViewTimeData(new DateTime(2016, 08, 06, 12, 32, 55), new TimeSpan(0, 5, 20)));
-            stats.ViewTimeData.Add(new ViewTimeData(new DateTime(2016, 08, 07, 12, 32, 55), new TimeSpan(0, 5, 20)));
-            stats.ViewTimeData.Add(new ViewTimeData(new DateTime(2016, 08, 08, 12, 32, 55), new TimeSpan(0, 5, 20)));
-            stats.ViewTimeData.Add(new ViewTimeData(new DateTime(2016, 08, 09, 12, 32, 55), new TimeSpan(0, 5, 20)));
+            Random rnd = new Random();
+
+            for (int i = 0; i < 50; i++)
+                stats.ViewTimeData.Add(new ViewTimeData(new DateTime(2016, 8, rnd.Next(1, 32)), new TimeSpan(rnd.Next(1), rnd.Next(1, 60), rnd.Next(60))));
 
             InitializeComponent();
 

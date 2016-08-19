@@ -30,61 +30,38 @@ namespace Twitch_Viewer.Types
         [XmlIgnore]
         public ObservableCollection<ViewTimeData> ViewTimeData { get { return viewTimeData; } set { viewTimeData = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); BindingOperations.EnableCollectionSynchronization(ViewTimeData, lockObjectViewTimeData); } }
 
-        public double MondayValue
-        {
-            get
-            {
-                return 200 * calcDayStats(DayOfWeek.Monday);
-            }
-        }
+        #region GraphProperties
+        #region GraphHeight
+        public double MondayHeight { get { return 200 * calcDayStats(DayOfWeek.Monday); } }
 
-        public double TuesdayValue
-        {
-            get
-            {
-                return 200 * calcDayStats(DayOfWeek.Tuesday);
-            }
-        }
+        public double TuesdayHeight { get { return 200 * calcDayStats(DayOfWeek.Tuesday); } }
 
-        public double WednesdayValue
-        {
-            get
-            {
-                return 200 * calcDayStats(DayOfWeek.Wednesday);
-            }
-        }
+        public double WednesdayHeight { get { return 200 * calcDayStats(DayOfWeek.Wednesday); } }
 
-        public double ThursdayValue
-        {
-            get
-            {
-                return 200 * calcDayStats(DayOfWeek.Thursday);
-            }
-        }
+        public double ThursdayHeight { get { return 200 * calcDayStats(DayOfWeek.Thursday); } }
 
-        public double FridayValue
-        {
-            get
-            {
-                return 200 * calcDayStats(DayOfWeek.Friday);
-            }
-        }
+        public double FridayHeight { get { return 200 * calcDayStats(DayOfWeek.Friday); } }
 
-        public double SaturdayValue
-        {
-            get
-            {
-                return 200 * calcDayStats(DayOfWeek.Saturday);
-            }
-        }
+        public double SaturdayHeight { get { return 200 * calcDayStats(DayOfWeek.Saturday); } }
 
-        public double SundayValue
-        {
-            get
-            {
-                return 200 * calcDayStats(DayOfWeek.Sunday);
-            }
-        }
+        public double SundayHeight { get { return 200 * calcDayStats(DayOfWeek.Sunday); } }
+        #endregion
+        #region GraphValues
+        public double MondayValue { get { return calcDayStats(DayOfWeek.Monday); } }
+
+        public double TuesdayValue { get { return calcDayStats(DayOfWeek.Tuesday); } }
+
+        public double WednesdayValue { get { return calcDayStats(DayOfWeek.Wednesday); } }
+
+        public double ThursdayValue { get { return calcDayStats(DayOfWeek.Thursday); } }
+
+        public double FridayValue { get { return calcDayStats(DayOfWeek.Friday); } }
+
+        public double SaturdayValue { get { return calcDayStats(DayOfWeek.Saturday); } }
+
+        public double SundayValue { get { return calcDayStats(DayOfWeek.Sunday); } }
+        #endregion
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 
