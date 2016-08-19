@@ -24,7 +24,7 @@ namespace Twitch_Viewer
     {
         private Twixel twixel;
         public static Settings settings;
-        public static StatsTest statsWindow;
+        public static StatsWindow statsWindow;
 
         public static string username;
         public static readonly string workingDir = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
@@ -789,7 +789,7 @@ namespace Twitch_Viewer
         {
             var item = (sender as Button).DataContext as StreamItem;
 
-            StatsTest window = new StatsTest(item.StreamStats);
+            StatsWindow window = new StatsWindow(item.StreamStats);
             window.Show();
         }
     }

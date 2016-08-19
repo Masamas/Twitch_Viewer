@@ -28,7 +28,7 @@ namespace Twitch_Viewer.Types
         public string ViewTimeString { get { return XmlConvert.ToString(viewTime); } set { viewTime = XmlConvert.ToTimeSpan(value); OnPropertyChanged(MethodBase.GetCurrentMethod()); } }
         public int ViewCount { get { return viewCount; } set { viewCount = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); } }
         [XmlIgnore]
-        public ObservableCollection<ViewTimeData> ViewTimeData { get { return viewTimeData; } set { viewTimeData = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); BindingOperations.EnableCollectionSynchronization(ViewTimeData, lockObjectViewTimeData); } }
+        public ObservableCollection<ViewTimeData> ViewTimeData { get { viewTimeData.Sort(item => item.Start); return viewTimeData; } set { viewTimeData = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); BindingOperations.EnableCollectionSynchronization(ViewTimeData, lockObjectViewTimeData); } }
 
         #region GraphProperties
         #region GraphHeight

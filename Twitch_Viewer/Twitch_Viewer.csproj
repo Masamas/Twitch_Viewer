@@ -101,8 +101,8 @@
     </ApplicationDefinition>
     <Compile Include="DirectoryHandler.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="StatsTest.xaml.cs">
-      <DependentUpon>StatsTest.xaml</DependentUpon>
+    <Compile Include="StatsWindow.xaml.cs">
+      <DependentUpon>StatsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Types\GameItem.cs" />
     <Compile Include="Types\GameStatsItem.cs" />
@@ -129,7 +129,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="StatsTest.xaml">
+    <Page Include="StatsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
