@@ -361,13 +361,6 @@
                                 <Label Content="Refresh Interval (s):" HorizontalAlignment="Left" />
                                 <TextBox Text="{Binding Path=RefreshInterval}" Width="80" HorizontalAlignment="Right" />
                             </Grid>
-                            <StackPanel x:Name="DebugSettings" Visibility="Collapsed">
-                                <Label Content="DebugSettings" FontFamily="Arial Black" FontWeight="Bold" FontSize="18" />
-                                <Grid>
-                                    <Label Content="Disable 30 second limit on stats?" HorizontalAlignment="Left" />
-                                    <CheckBox IsChecked="{Binding DebugStatsLimit}" HorizontalAlignment="Right" VerticalAlignment="Center" />
-                                </Grid>
-                            </StackPanel>
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>

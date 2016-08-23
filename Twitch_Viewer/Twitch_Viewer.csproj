@@ -99,6 +99,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DebugSettingsWindow.xaml.cs">
+      <DependentUpon>DebugSettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DirectoryHandler.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="StatsWindow.xaml.cs">
@@ -117,6 +120,10 @@
       <DependentUpon>UsernameDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Types\StreamStatsItem.cs" />
+    <Page Include="DebugSettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

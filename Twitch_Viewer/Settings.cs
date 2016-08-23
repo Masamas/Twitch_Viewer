@@ -145,11 +145,6 @@ namespace Twitch_Viewer
             get { return gameStats; }
             set { gameStats = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
         }
-
-        #region DebugProperties
-        [XmlIgnore]
-        public bool DebugStatsLimit { get; set; } = true;
-        #endregion
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
