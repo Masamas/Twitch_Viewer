@@ -123,6 +123,14 @@ namespace Twitch_Viewer.Types
             }
         }
 
+        public void registerStatsItem()
+        {
+            if (StreamStats != null)
+                StreamStats.PropertyChanged += ItemStateChanged;
+
+            OnPropertyChanged("HeartImage");
+        }
+
         protected void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
