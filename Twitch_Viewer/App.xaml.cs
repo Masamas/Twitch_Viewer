@@ -20,10 +20,6 @@ namespace Twitch_Viewer
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            for (int i = settings.StreamStats.Count - 1; i >= 0; i--)
-                if (!settings.StreamStats[i].Saved && settings.StreamStats[i].ViewCount == 0)
-                    settings.StreamStats.RemoveAt(i);
-
             settingsHelper.Save(settings);
         }
 

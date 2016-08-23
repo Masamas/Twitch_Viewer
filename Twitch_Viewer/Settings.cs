@@ -205,6 +205,8 @@ namespace Twitch_Viewer
 
         public bool Save(Settings settings)
         {
+            PurgeStats(settings);
+
             try
             {
                 using (TextWriter WriteFileStream = new StreamWriter(savePath, false))
@@ -230,6 +232,17 @@ namespace Twitch_Viewer
             }
 
             return loadedSettings;
+        }
+
+        private void PurgeStats(Settings settings)
+        {
+            for (int i = settings.StreamStats.Count - 1; i >= 0; i--)
+                if (!settings.StreamStats[i].Saved && settings.StreamStats[i].ViewCount == 0)
+                    settings.StreamStats.RemoveAt(i);
+
+            for (int i = settings.GameStats.Count - 1; i >= 0; i--)
+                if (settings.GameStats[i].ViewCount == 0)
+                    settings.GameStats.RemoveAt(i);
         }
     }
 }
