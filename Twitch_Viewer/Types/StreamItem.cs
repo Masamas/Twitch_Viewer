@@ -97,7 +97,7 @@ namespace Twitch_Viewer.Types
         {
             var truncatedTime = new TimeSpan(duration.Days, duration.Hours, duration.Minutes, duration.Seconds + (duration.Milliseconds > 500 ? 1 : 0));
 
-            if (MainWindow._debugSettings.DebugStatsLimit)
+            if (MainWindow._debugSettings?.DebugStatsLimit == true)
             {
                 StreamStats.ViewTimeData.Add(new ViewTimeData(start, truncatedTime));
                 StreamStats.ViewTime += truncatedTime;
