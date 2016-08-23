@@ -781,6 +781,7 @@ namespace Twitch_Viewer
         private void ShowDebugSettings()
         {
             _debugSettings = new DebugSettingsWindow();
+            _debugSettings.DataContext = _debugSettings;
             _debugSettings.Show();
         }
         #endregion
