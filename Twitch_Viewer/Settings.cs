@@ -59,28 +59,42 @@ namespace Twitch_Viewer
     //}
     #endregion
 
+    public enum SortOrder
+    {
+        NameAscending,
+        NameDescending,
+        ViewCountAscending,
+        ViewCountDescending,
+        ViewTimeAscending,
+        ViewTimeDescending
+    }
+
     [Serializable, XmlRoot("Settings")]
     public class Settings : INotifyPropertyChanged
     {
         private Stopwatch sw;
         private Timer _timer;
 
-        #region Properties
         private string livestreamerArgs = "";
+        private int refreshInterval = 60;
+        private TimeSpan totalRunTime;
+
+        private ObservableCollection<StreamStatsItem> streamStats = new ObservableCollection<StreamStatsItem>();
+        private ObservableCollection<GameStatsItem> gameStats = new ObservableCollection<GameStatsItem>();
+
+        #region Properties
         public string LivestreamerArgs
         {
             get { return livestreamerArgs; }
             set { livestreamerArgs = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
         }
 
-        private int refreshInterval = 60;
         public int RefreshInterval
         {
             get { return refreshInterval; }
             set { refreshInterval = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
         }
 
-        private TimeSpan totalRunTime;
         [XmlIgnore]
         public TimeSpan TotalRunTime
         {
@@ -94,16 +108,7 @@ namespace Twitch_Viewer
         }
 
         [XmlIgnore]
-        public bool SortedByName { get; set; } = false;
-
-        [XmlIgnore]
-        public bool SortedByViewCount { get; set; } = false;
-
-        [XmlIgnore]
-        public bool SortedByViewTime { get; set; } = true;
-
-        [XmlIgnore]
-        public bool SortedDescending { get; set; } = false;
+        public SortOrder SortedBy { get; set; } = SortOrder.ViewTimeDescending;
 
         public TimeSpan TotalViewTime
         {
@@ -129,22 +134,18 @@ namespace Twitch_Viewer
             }
         }
 
-        private ObservableCollection<StreamStatsItem> streamStats = new ObservableCollection<StreamStatsItem>();
         public ObservableCollection<StreamStatsItem> StreamStats
         {
             get { return streamStats; }
             set { streamStats = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
         }
 
-        private ObservableCollection<GameStatsItem> gameStats = new ObservableCollection<GameStatsItem>();
         public ObservableCollection<GameStatsItem> GameStats
         {
             get { return gameStats; }
             set { gameStats = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
         }
         #endregion
-
-        private readonly object lockObjectViewTimes = new object();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
