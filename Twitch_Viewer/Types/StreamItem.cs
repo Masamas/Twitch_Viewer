@@ -80,6 +80,7 @@ namespace Twitch_Viewer.Types
             stopwatch.Start();
             p.Exited += (pSender, pArgs) => stopwatch.Stop();
             p.Exited += (pSender, pArgs) => addViewStats(start, stopwatch.Elapsed);
+            p.Exited += (pSender, pArgs) => p.Dispose();
             p.Start();
             p.BeginOutputReadLine();
 
@@ -88,8 +89,6 @@ namespace Twitch_Viewer.Types
             {
                 if (p?.HasExited != true)
                     p.Kill();
-
-                p.Dispose();
             };
             loadingDialog.Show();
         }
