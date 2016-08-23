@@ -82,7 +82,13 @@ namespace Twitch_Viewer.Types
             p.BeginOutputReadLine();
 
             //loadingDialog.Initialized += (wSender, wArgs) => loadingDialog.Owner = null;
-            loadingDialog.Closing += (dSender, dArgs) => p?.Kill();
+            loadingDialog.Closing += (dSender, dArgs) =>
+            {
+                if (p?.HasExited != true)
+                    p.Kill();
+
+                p.Dispose();
+            };
             loadingDialog.Show();
         }
 
