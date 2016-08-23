@@ -24,6 +24,7 @@ namespace Twitch_Viewer
     {
         private Twixel twixel;
         public static Settings settings;
+        public static StatsWindow statsWindow;
 
         public static string username;
         public static readonly string workingDir = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
@@ -595,31 +596,9 @@ namespace Twitch_Viewer
 
             viewTimeStats.ItemsSource = settings.StreamStats.Where(stats => stats.ViewCount != 0);
             gameViewTimeStats.ItemsSource = settings.GameStats.Where(stats => stats.ViewCount != 0);
-        }
 
-        [Obsolete("addViewTime in MainWindow is deprecated, use addViewTime in StreamItem instead.", true)]
-        private void addViewStats(string name, string game, TimeSpan time)
-        {
-            var truncatedTime = new TimeSpan(time.Days, time.Hours, time.Minutes, time.Seconds + (time.Milliseconds > 500 ? 1 : 0));
-            var stats = settings.StreamStats.FirstOrDefault(item => item.Name == name);
-            var gameStats = settings.GameStats.FirstOrDefault(item => item.Name == game);
-
-            if (settings.DebugStatsLimit)
-            {
-                stats.ViewTime += truncatedTime;
-                stats.ViewCount++;
-                gameStats.ViewTime += truncatedTime;
-                gameStats.ViewCount++;
-                return;
-            }
-
-            if (time.TotalSeconds >= 30.0)
-            {
-                stats.ViewTime += truncatedTime;
-                stats.ViewCount++;
-                gameStats.ViewTime += truncatedTime;
-                gameStats.ViewCount++;
-            }
+            settings.StreamStats.CollectionChanged += (s, args) => viewTimeStats.ItemsSource = settings.StreamStats.Where(stats => stats.ViewCount != 0);
+            settings.GameStats.CollectionChanged += (s, args) => gameViewTimeStats.ItemsSource = settings.GameStats.Where(stats => stats.ViewCount != 0);
         }
 
         private void resetStatsButton_Click(object sender, RoutedEventArgs e)
@@ -655,29 +634,19 @@ namespace Twitch_Viewer
 
         private void StatsSortByName(object sender, MouseButtonEventArgs e)
         {
-            if (!settings.SortedByName)
+            if (!(settings.SortedBy == SortOrder.NameAscending))
             {
                 settings.StreamStats.Sort(item => item.Name, false);
-                settings.SortedByName = true;
-                settings.SortedByViewCount = false;
-                settings.SortedByViewTime = false;
-                settings.SortedDescending = false;
+                settings.SortedBy = SortOrder.NameAscending;
 
                 NameSortArrow.Source = new BitmapImage(new Uri("/imageResources/UpArrow.png", UriKind.Relative));
                 ViewCountSortArrow.Source = new BitmapImage(new Uri("/imageResources/DownArrowInactive.png", UriKind.Relative));
                 ViewTimeSortArrow.Source = new BitmapImage(new Uri("/imageResources/DownArrowInactive.png", UriKind.Relative));
             }
-            else if (settings.SortedDescending)
-            {
-                settings.StreamStats.Sort(item => item.Name, false);
-                settings.SortedDescending = false;
-
-                NameSortArrow.Source = new BitmapImage(new Uri("/imageResources/UpArrow.png", UriKind.Relative));
-            }
             else
             {
                 settings.StreamStats.Sort(item => item.Name, true);
-                settings.SortedDescending = true;
+                settings.SortedBy = SortOrder.NameDescending;
 
                 NameSortArrow.Source = new BitmapImage(new Uri("/imageResources/DownArrow.png", UriKind.Relative));
             }
@@ -685,61 +654,41 @@ namespace Twitch_Viewer
 
         private void StatsSortByViewCount(object sender, MouseButtonEventArgs e)
         {
-            if (!settings.SortedByViewCount)
+            if (!(settings.SortedBy == SortOrder.ViewCountDescending))
             {
                 settings.StreamStats.Sort(item => item.ViewCount, true);
-                settings.SortedByName = false;
-                settings.SortedByViewCount = true;
-                settings.SortedByViewTime = false;
-                settings.SortedDescending = true;
+                settings.SortedBy = SortOrder.ViewCountDescending;
 
                 ViewCountSortArrow.Source = new BitmapImage(new Uri("/imageResources/DownArrow.png", UriKind.Relative));
                 NameSortArrow.Source = new BitmapImage(new Uri("/imageResources/DownArrowInactive.png", UriKind.Relative));
                 ViewTimeSortArrow.Source = new BitmapImage(new Uri("/imageResources/DownArrowInactive.png", UriKind.Relative));
             }
-            else if (settings.SortedDescending)
-            {
-                settings.StreamStats.Sort(item => item.ViewCount, false);
-                settings.SortedDescending = false;
-
-                ViewCountSortArrow.Source = new BitmapImage(new Uri("/imageResources/UpArrow.png", UriKind.Relative));
-            }
             else
             {
-                settings.StreamStats.Sort(item => item.ViewCount, true);
-                settings.SortedDescending = true;
+                settings.StreamStats.Sort(item => item.ViewCount, false);
+                settings.SortedBy = SortOrder.ViewCountAscending;
 
-                ViewCountSortArrow.Source = new BitmapImage(new Uri("/imageResources/DownArrow.png", UriKind.Relative));
+                ViewCountSortArrow.Source = new BitmapImage(new Uri("/imageResources/UpArrow.png", UriKind.Relative));
             }
         }
 
         private void StatsSortByViewTime(object sender, MouseButtonEventArgs e)
         {
-            if (!settings.SortedByViewTime)
+            if (!(settings.SortedBy == SortOrder.ViewTimeDescending))
             {
                 settings.StreamStats.Sort(item => item.ViewTime, true);
-                settings.SortedByName = false;
-                settings.SortedByViewCount = false;
-                settings.SortedByViewTime = true;
-                settings.SortedDescending = true;
+                settings.SortedBy = SortOrder.ViewTimeDescending;
 
                 ViewTimeSortArrow.Source = new BitmapImage(new Uri("/imageResources/DownArrow.png", UriKind.Relative));
                 ViewCountSortArrow.Source = new BitmapImage(new Uri("/imageResources/DownArrowInactive.png", UriKind.Relative));
                 NameSortArrow.Source = new BitmapImage(new Uri("/imageResources/DownArrowInactive.png", UriKind.Relative));
             }
-            else if (settings.SortedDescending)
-            {
-                settings.StreamStats.Sort(item => item.ViewTime, false);
-                settings.SortedDescending = false;
-
-                ViewTimeSortArrow.Source = new BitmapImage(new Uri("/imageResources/UpArrow.png", UriKind.Relative));
-            }
             else
             {
-                settings.StreamStats.Sort(item => item.ViewTime, true);
-                settings.SortedDescending = true;
+                settings.StreamStats.Sort(item => item.ViewTime, false);
+                settings.SortedBy = SortOrder.ViewTimeAscending;
 
-                ViewTimeSortArrow.Source = new BitmapImage(new Uri("/imageResources/DownArrow.png", UriKind.Relative));
+                ViewTimeSortArrow.Source = new BitmapImage(new Uri("/imageResources/UpArrow.png", UriKind.Relative));
             }
         }
         #endregion
@@ -835,5 +784,13 @@ namespace Twitch_Viewer
             DebugSettings.DataContext = settings;
         }
         #endregion
+
+        private void statsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var item = (sender as Button).DataContext as StreamItem;
+
+            StatsWindow window = new StatsWindow(item.StreamStats);
+            window.Show();
+        }
     }
 }
