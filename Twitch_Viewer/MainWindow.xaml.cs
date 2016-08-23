@@ -796,10 +796,23 @@ namespace Twitch_Viewer
 
         private void statsButton_Click(object sender, RoutedEventArgs e)
         {
-            var item = (sender as Button).DataContext as StreamItem;
+            StatsWindow window = null;
 
-            StatsWindow window = new StatsWindow(item.StreamStats);
-            window.Show();
+            if ((sender as Button).DataContext is StreamItem)
+            {
+                var item = (sender as Button).DataContext as StreamItem;
+
+                window = new StatsWindow(item.StreamStats);
+            }
+            else if ((sender as Button).DataContext is StreamStatsItem)
+            {
+                var item = (sender as Button).DataContext as StreamStatsItem;
+
+                window = new StatsWindow(item);
+            }
+
+            
+            window?.Show();
         }
     }
 }
