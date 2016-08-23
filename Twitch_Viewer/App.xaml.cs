@@ -20,6 +20,10 @@ namespace Twitch_Viewer
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            for (int i = settings.StreamStats.Count - 1; i >= 0; i--)
+                if (!settings.StreamStats[i].Saved && settings.StreamStats[i].ViewCount == 0)
+                    settings.StreamStats.RemoveAt(i);
+
             settingsHelper.Save(settings);
         }
 
@@ -27,7 +31,10 @@ namespace Twitch_Viewer
         {
             var now = DateTime.Now;
 
-            string fileName = $"ExceptionStackTrace_{now.Day}_{now.Month}_{now.Year}-{now.Hour}_{now.Minute}_{now.Second}";
+            string fileName = $"Exceptions/ExceptionStackTrace_{now.Day}_{now.Month}_{now.Year}-{now.Hour}_{now.Minute}_{now.Second}";
+
+            if (!Directory.Exists("Exceptions"))
+                Directory.CreateDirectory("Exceptions");
 
             using (StreamWriter sr = new StreamWriter(fileName))
             {
