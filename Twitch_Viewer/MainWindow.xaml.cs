@@ -24,6 +24,7 @@ namespace Twitch_Viewer
     {
         private Twixel twixel;
         public static Settings settings;
+        public static DebugSettingsWindow _debugSettings;
 
         public static string username;
         public static readonly string workingDir = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
@@ -604,7 +605,7 @@ namespace Twitch_Viewer
             var stats = settings.StreamStats.FirstOrDefault(item => item.Name == name);
             var gameStats = settings.GameStats.FirstOrDefault(item => item.Name == game);
 
-            if (settings.DebugStatsLimit)
+            if (_debugSettings.DebugStatsLimit)
             {
                 stats.ViewTime += truncatedTime;
                 stats.ViewCount++;
@@ -831,8 +832,8 @@ namespace Twitch_Viewer
         [Conditional("DEBUG")]
         private void ShowDebugSettings()
         {
-            DebugSettings.Visibility = Visibility.Visible;
-            DebugSettings.DataContext = settings;
+            _debugSettings = new DebugSettingsWindow();
+            _debugSettings.Show();
         }
         #endregion
     }
