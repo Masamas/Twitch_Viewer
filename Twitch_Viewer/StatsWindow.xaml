@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Twitch_Viewer"
         mc:Ignorable="d"
-        Title="Stats" Height="557" Width="458" ResizeMode="NoResize">
+        Title="Stats" Height="572" Width="458" ResizeMode="NoResize">
     <DockPanel Margin="5">
         <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" FontWeight="Bold" FontSize="16" />
         <Grid DockPanel.Dock="Top" Margin="0,5,0,5">
@@ -36,7 +36,7 @@
             <TextBlock Text="Gesamtzeit" HorizontalAlignment="Left" VerticalAlignment="Center" />
             <TextBlock Text="{Binding ViewTime}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,18,0" />
         </Grid>
-        <Grid DockPanel.Dock="Bottom" Margin="0,0,18,0">
+        <Grid DockPanel.Dock="Bottom" Margin="0,15,18,0">
             <Grid> <!-- Scale -->
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20" />
