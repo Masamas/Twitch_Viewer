@@ -709,6 +709,8 @@ namespace Twitch_Viewer
                 addNewStreamItem(name);
             else
                 removeStreamItem(item);
+
+            item.registerStatsItem();
         }
 
         private void streamItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

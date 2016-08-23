@@ -97,7 +97,7 @@ namespace Twitch_Viewer.Types
         {
             var truncatedTime = new TimeSpan(duration.Days, duration.Hours, duration.Minutes, duration.Seconds + (duration.Milliseconds > 500 ? 1 : 0));
 
-            if (MainWindow._debugSettings.DebugStatsLimit)
+            if (MainWindow._debugSettings?.DebugStatsLimit == true)
             {
                 StreamStats.ViewTimeData.Add(new ViewTimeData(start, truncatedTime));
                 StreamStats.ViewTime += truncatedTime;
@@ -121,6 +121,14 @@ namespace Twitch_Viewer.Types
                     GameStats.ViewCount++;
                 }
             }
+        }
+
+        public void registerStatsItem()
+        {
+            if (StreamStats != null)
+                StreamStats.PropertyChanged += ItemStateChanged;
+
+            OnPropertyChanged("HeartImage");
         }
 
         protected void OnPropertyChanged(string propertyName)
