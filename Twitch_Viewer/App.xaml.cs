@@ -37,7 +37,10 @@ namespace Twitch_Viewer
             }
 
             MessageBox.Show("An unhandled exception occurred: " + e.Exception.Message, "Exception occurred", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+#if !DEBUG
             e.Handled = true;
+#endif
         }
     }
 }
