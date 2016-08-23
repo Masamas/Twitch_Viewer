@@ -720,6 +720,8 @@ namespace Twitch_Viewer
                 refreshAllItems();
                 e.Handled = true;
             }
+            else if (e.Key == Key.F12)
+                ShowDebugSettings();
         }
 
         private async void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
@@ -782,9 +784,13 @@ namespace Twitch_Viewer
         [Conditional("DEBUG")]
         private void ShowDebugSettings()
         {
-            _debugSettings = new DebugSettingsWindow();
-            _debugSettings.DataContext = _debugSettings;
-            _debugSettings.Show();
+            if (_debugSettings == null)
+            {
+                _debugSettings = new DebugSettingsWindow();
+                _debugSettings.DataContext = _debugSettings;
+                _debugSettings.Closed += (wSender, wArgs) => _debugSettings = null;
+                _debugSettings.Show();
+            }
         }
         #endregion
 
