@@ -497,7 +497,14 @@ namespace Twitch_Viewer
 
             foreach (TwixelAPI.Stream stream in list)
             {
-                gameStreams.AddIfNew<StreamItem>(new StreamItem(stream.channel.name, stream.channel.displayName, stream.game, StreamItemHelper.getPreview(stream, stream.channel), stream.viewers.Value.ToString()));
+                string preview = StreamItemHelper.getPreview(stream, stream.channel);
+
+                using (StreamWriter sr = new StreamWriter("PreviewPaths", true))
+                {
+                    sr.WriteLine(DateTime.Now.ToString() + " - Preview Image URI:" + preview);
+                }
+
+                gameStreams.AddIfNew<StreamItem>(new StreamItem(stream.channel.name, stream.channel.displayName, stream.game, preview, stream.viewers.Value.ToString()));
             }
 
             gameStreamsOffset += 25;
