@@ -93,15 +93,13 @@ namespace Twitch_Viewer
             return followedChannelNames;
         }
 
-        public static BitmapImage getPreview(Stream stream, Channel channel)
+        public static string getPreview(Stream stream, Channel channel)
         {
-            BitmapImage image = new BitmapImage();
+            string path;
 
-            image.BeginInit();
-            image.UriSource = stream != null ? stream.previewList["medium"] : channel?.videoBanner != null ? channel.videoBanner : new Uri("imageResources/Error.png", UriKind.Relative);
-            image.EndInit();
+            path = stream != null ? stream.previewList["medium"].AbsoluteUri : channel?.videoBanner != null ? channel.videoBanner.AbsoluteUri : "imageResources/Error.png";
 
-            return image;
+            return path;
         }
     }
 }

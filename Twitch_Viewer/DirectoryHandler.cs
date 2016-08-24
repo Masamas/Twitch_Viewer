@@ -47,15 +47,13 @@ namespace Twitch_Viewer
             return channels;
         }
 
-        public static BitmapImage getBoxImage(Game game)
+        public static string getBoxImage(Game game)
         {
-            BitmapImage image = new BitmapImage();
+            string path;
 
-            image.BeginInit();
-            image.UriSource = game.box["medium"];
-            image.EndInit();
+            path = game.box["medium"].AbsoluteUri;
 
-            return image;
+            return path;
         }
     }
 }

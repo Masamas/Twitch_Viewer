@@ -19,8 +19,8 @@ namespace Twitch_Viewer.Types
         public string DisplayName { get { return displayName; } set { displayName = value; OnPropertyChanged(MethodInfo.GetCurrentMethod()); } }
         private string curGame;
         public string CurGame { get { return curGame; } set { curGame = value; OnPropertyChanged(MethodInfo.GetCurrentMethod()); } }
-        private BitmapImage preview;
-        public BitmapImage Preview { get { return preview; } set { preview = value; OnPropertyChanged(MethodInfo.GetCurrentMethod()); } }
+        private string preview;
+        public string Preview { get { return preview; } set { preview = value; OnPropertyChanged(MethodInfo.GetCurrentMethod()); } }
         private string viewers;
         public string Viewers { get { return viewers; } set { viewers = value; OnPropertyChanged(MethodInfo.GetCurrentMethod()); } }
         public StreamStatsItem StreamStats { get { return MainWindow.settings.StreamStats.FirstOrDefault(stats => stats.Name == this.name); } }
@@ -39,7 +39,7 @@ namespace Twitch_Viewer.Types
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public StreamItem(string name, string displayName, string curGame, BitmapImage preview, string viewers)
+        public StreamItem(string name, string displayName, string curGame, string preview, string viewers)
         {
             this.name = name;
             this.displayName = displayName;

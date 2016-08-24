@@ -10,14 +10,14 @@ namespace Twitch_Viewer.Types
         private string name;
         public string Name { get { return name.Length < 20 ? name : name.Remove(20) + "..."; } set { name = value; OnPropertyChanged(MethodInfo.GetCurrentMethod()); } }
         public string FullName { get { return name; } }
-        private BitmapImage preview;
-        public BitmapImage Preview { get { return preview; } set { preview = value; OnPropertyChanged(MethodInfo.GetCurrentMethod()); } }
+        private string preview;
+        public string Preview { get { return preview; } set { preview = value; OnPropertyChanged(MethodInfo.GetCurrentMethod()); } }
         private string viewers;
         public string Viewers { get { return viewers; } set { viewers = value; OnPropertyChanged(MethodInfo.GetCurrentMethod()); } }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public GameItem(string name, BitmapImage preview, string viewers)
+        public GameItem(string name, string preview, string viewers)
         {
             this.name = name;
             this.preview = preview;
