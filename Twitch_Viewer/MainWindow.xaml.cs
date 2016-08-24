@@ -330,7 +330,7 @@ namespace Twitch_Viewer
         }
         #endregion
         #region Stream List
-        private async void streamListAddButton_Click(object sender, RoutedEventArgs e)
+        private void streamListAddButton_Click(object sender, RoutedEventArgs e)
         {
             var link = getStreamLink();
 

@@ -265,7 +265,19 @@
             <!-- Stats -->
             <TabItem x:Name="statsTab" Selector.Selected="statsTab_SelectorSelected">
                 <TabItem.Header>
-                    <Grid>
+                    <Grid ToolTipService.InitialShowDelay="0">
+                        <Grid.ToolTip>
+                            <ToolTip Content="Stats" Placement="Right" OverridesDefaultStyle="True" HasDropShadow="True" VerticalOffset="3">
+                                <ToolTip.Template>
+                                    <ControlTemplate TargetType="ToolTip">
+                                        <Grid>
+                                            <Polygon Stroke="Black" StrokeThickness="1" Fill="White" Points="0,15 8,0 100,0 100,30 8,30" />
+                                            <TextBlock Text="{TemplateBinding Content}" Margin="10, 5, 5, 3" FontSize="14" FontFamily="Arial"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </ToolTip.Template>
+                            </ToolTip>
+                        </Grid.ToolTip>
                         <Rectangle Fill="Transparent" />
                         <Image Source="imageResources/Stats.png" />
                     </Grid>
@@ -345,7 +357,19 @@
             <!-- Settings -->
             <TabItem x:Name="settingsTab">
                 <TabItem.Header>
-                    <Grid>
+                    <Grid ToolTipService.InitialShowDelay="0">
+                        <Grid.ToolTip>
+                            <ToolTip Content="Settings" Placement="Right" OverridesDefaultStyle="True" HasDropShadow="True" VerticalOffset="3">
+                                <ToolTip.Template>
+                                    <ControlTemplate TargetType="ToolTip">
+                                        <Grid>
+                                            <Polygon Stroke="Black" StrokeThickness="1" Fill="White" Points="0,15 8,0 100,0 100,30 8,30" />
+                                            <TextBlock Text="{TemplateBinding Content}" Margin="10, 5, 5, 3" FontSize="14" FontFamily="Arial"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </ToolTip.Template>
+                            </ToolTip>
+                        </Grid.ToolTip>
                         <Rectangle Fill="Transparent" />
                         <Image Source="imageResources/Settings.png" />
                     </Grid>
