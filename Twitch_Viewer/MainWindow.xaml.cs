@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Collections.Specialized;
 using System.Windows.Media.Imaging;
 using Twitch_Viewer.Types;
+using System.Windows.Media;
 
 namespace Twitch_Viewer
 {
@@ -333,7 +334,7 @@ namespace Twitch_Viewer
         {
             var link = getStreamLink();
 
-            if (!link.StartsWith("twitch.tv/"))
+            if (!checkStreamLink(link))
                 return;
 
             var name = getStreamName();
@@ -352,6 +353,10 @@ namespace Twitch_Viewer
         private void watchButton_Click(object sender, RoutedEventArgs e)
         {
             var link = getStreamLink();
+
+            if (!checkStreamLink(link))
+                return;
+
             string args = LivestreamerArgs != null && LivestreamerArgs.Length != 0 ? $"{LivestreamerArgs} {link} {SelectedQuality}" : $"{link} {SelectedQuality}";
 
             Process p = Process.Start(@"C:\program files (x86)\Livestreamer\livestreamer.exe", args);
@@ -413,6 +418,22 @@ namespace Twitch_Viewer
                 itemsOffline.Remove(offlineItem);
 
             item.StreamStats.Saved = false;
+        }
+
+        private bool checkStreamLink(string link)
+        {
+            if (!link.StartsWith("twitch.tv/"))
+            {
+                textBlockStreamLink.Background = new SolidColorBrush(Color.FromArgb(100, 245, 54, 54));
+                textBlockStreamLink.GotFocus += (s, a) => textBlockStreamLink.Background = Brushes.White;
+                MessageBox.Show($"{link} is not a valid twitch.tv link.\nPlease provide a link in the format of twitch.tv/[username]");
+
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         #endregion
         #region Directory
