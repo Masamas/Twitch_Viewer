@@ -499,11 +499,6 @@ namespace Twitch_Viewer
             {
                 string preview = StreamItemHelper.getPreview(stream, stream.channel);
 
-                using (StreamWriter sr = new StreamWriter("PreviewPaths", true))
-                {
-                    sr.WriteLine(DateTime.Now.ToString() + " - Preview Image URI:" + preview);
-                }
-
                 gameStreams.AddIfNew<StreamItem>(new StreamItem(stream.channel.name, stream.channel.displayName, stream.game, preview, stream.viewers.Value.ToString()));
             }
 
