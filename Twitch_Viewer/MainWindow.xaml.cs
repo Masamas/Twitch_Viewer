@@ -175,6 +175,10 @@ namespace Twitch_Viewer
 
             ShowDebugSettings();
 
+            WindowManager test = new WindowManager();
+
+            test.moveVlc();
+
             //UsernameDialog usernameDialog = new UsernameDialog();
             //usernameDialog.ShowDialog();
         }
