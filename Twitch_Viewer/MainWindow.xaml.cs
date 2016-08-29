@@ -837,5 +837,12 @@ namespace Twitch_Viewer
             
             window?.Show();
         }
+
+        private void PiPButton_Click(object sender, RoutedEventArgs e)
+        {
+            var item = (sender as Button).DataContext as StreamItem;
+
+            item.StartOverlayStream(settings.LivestreamerArgs, this);
+        }
     }
 }

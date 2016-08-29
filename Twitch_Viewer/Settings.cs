@@ -77,6 +77,10 @@ namespace Twitch_Viewer
 
         private string livestreamerArgs = "";
         private int refreshInterval = 60;
+        private double zoom = 0.4;
+        private int pipXCoord;
+        private int pipYCoord;
+        private string pipQuality = "high";
         private TimeSpan totalRunTime;
 
         private ObservableCollection<StreamStatsItem> streamStats = new ObservableCollection<StreamStatsItem>();
@@ -93,6 +97,30 @@ namespace Twitch_Viewer
         {
             get { return refreshInterval; }
             set { refreshInterval = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
+        }
+
+        public double Zoom
+        {
+            get { return zoom; }
+            set { zoom = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
+        }
+
+        public int PiPXCoord
+        {
+            get { return pipXCoord; }
+            set { pipXCoord = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
+        }
+
+        public int PiPYCoord
+        {
+            get { return pipYCoord; }
+            set { pipYCoord = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
+        }
+
+        public string PiPQuality
+        {
+            get { return pipQuality; }
+            set { pipQuality = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
         }
 
         [XmlIgnore]

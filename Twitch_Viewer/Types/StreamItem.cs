@@ -93,6 +93,13 @@ namespace Twitch_Viewer.Types
             loadingDialog.Show();
         }
 
+        public void StartOverlayStream(string livestreamerArgs, MainWindow startWindow)
+        {
+            livestreamerArgs += $"--player=\"vlc --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top --zoom={MainWindow.settings.Zoom} --video-x={MainWindow.settings.PiPXCoord} --video-y={MainWindow.settings.PiPYCoord}\"";
+
+            StartStream(MainWindow.settings.PiPQuality, livestreamerArgs, startWindow);
+        }
+
         private void addViewStats(DateTime start, TimeSpan duration)
         {
             var truncatedTime = new TimeSpan(duration.Days, duration.Hours, duration.Minutes, duration.Seconds + (duration.Milliseconds > 500 ? 1 : 0));

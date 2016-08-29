@@ -54,7 +54,12 @@
                                             </Image>
                                             <Label Content="{Binding DisplayName}" FontWeight="Bold" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
                                             <Button Content="X" FontFamily="Arial Black" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="deleteButton_Click"/>
-                                            <Button Content="I" FontFamily="Arial Black" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,30,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="statsButton_Click" />
+                                            <Button Content="I" FontFamily="Arial Black" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,25,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="statsButton_Click" />
+                                            <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,50,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="PiPButton_Click">
+                                                <Button.Content>
+                                                    <Image Source="imageResources/PictureInPicture.png" Stretch="Fill" />
+                                                </Button.Content>
+                                            </Button>
                                             <Image Source="imageResources/Viewer.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,20"/>
                                             <Label Content="{Binding Viewers}" FontFamily="Arial Black" Foreground="Red" Margin="18,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="1"/>
                                             <Label Content="{Binding CurGame}" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
@@ -82,6 +87,11 @@
                                             <Label Content="{Binding DisplayName}" FontWeight="Bold" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
                                             <Button Content="X" FontFamily="Arial Black" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="deleteButton_Click"/>
                                             <Button Content="I" FontFamily="Arial Black" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,30,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="statsButton_Click" />
+                                            <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,50,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="PiPButton_Click">
+                                                <Button.Content>
+                                                    <Image Source="imageResources/PictureInPicture.png" Stretch="Fill" />
+                                                </Button.Content>
+                                            </Button>
                                             <Image Source="imageResources/Viewer.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,20"/>
                                             <Label Content="{Binding Viewers}" FontFamily="Arial Black" Foreground="Red" Margin="18,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="1"/>
                                             <Label Content="{Binding CurGame}" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
@@ -181,6 +191,11 @@
                                                         <Image Source="{Binding HeartImage}" Stretch="Fill" />
                                                     </Button.Content>
                                                 </Button>
+                                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,25,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="PiPButton_Click">
+                                                    <Button.Content>
+                                                        <Image Source="imageResources/PictureInPicture.png" Stretch="Fill" />
+                                                    </Button.Content>
+                                                </Button>
                                                 <Image Source="imageResources/Viewer.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,20"/>
                                                 <Label Content="{Binding Viewers}" FontFamily="Arial Black" Foreground="Red" Margin="18,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="1"/>
                                                 <Label Content="{Binding CurGame}" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
@@ -240,6 +255,11 @@
                                             <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="addButton_Click" >
                                                 <Button.Content>
                                                     <Image Source="{Binding HeartImage}" Stretch="Fill" />
+                                                </Button.Content>
+                                            </Button>
+                                            <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="20" Height="20" Margin="0,0,25,15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="PiPButton_Click">
+                                                <Button.Content>
+                                                    <Image Source="imageResources/PictureInPicture.png" Stretch="Fill" />
                                                 </Button.Content>
                                             </Button>
                                             <Image Source="imageResources/Viewer.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,20"/>
@@ -385,6 +405,22 @@
                             <Grid Margin="0,10,0,0">
                                 <Label Content="Refresh Interval (s):" HorizontalAlignment="Left" />
                                 <TextBox Text="{Binding Path=RefreshInterval}" Width="80" HorizontalAlignment="Right" />
+                            </Grid>
+                            <Grid Margin="0,10,0,0">
+                                <Label Content="Zoom Value for PiP:" HorizontalAlignment="Left" />
+                                <TextBox Text="{Binding Path=Zoom}" Width="80" HorizontalAlignment="Right" />
+                            </Grid>
+                            <Grid Margin="0,10,0,0">
+                                <Label Content="X Coord for PiP:" HorizontalAlignment="Left" />
+                                <TextBox Text="{Binding Path=PiPXCoord}" Width="80" HorizontalAlignment="Right" />
+                            </Grid>
+                            <Grid Margin="0,10,0,0">
+                                <Label Content="Y Coord for PiP:" HorizontalAlignment="Left" />
+                                <TextBox Text="{Binding Path=PiPYCoord}" Width="80" HorizontalAlignment="Right" />
+                            </Grid>
+                            <Grid Margin="0,10,0,0">
+                                <Label Content="PiP Quality:" HorizontalAlignment="Left" />
+                                <ComboBox ItemsSource="{Binding Quality}" Text="{Binding PiPQuality}" SelectedIndex="0" FontWeight="Bold" Width="80" HorizontalAlignment="Right" />
                             </Grid>
                         </StackPanel>
                     </ScrollViewer>
