@@ -92,7 +92,21 @@ namespace Twitch_Viewer
         public int RefreshInterval
         {
             get { return refreshInterval; }
-            set { refreshInterval = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
+            set
+            {
+                if (value < 5)
+                    refreshInterval = 5;
+                else
+                    refreshInterval = value;
+
+                OnPropertyChanged(MethodBase.GetCurrentMethod());
+            }
+        }
+
+        [XmlIgnore]
+        public List<string> Quality
+        {
+            get { return MainWindow.Quality; }
         }
 
         [XmlIgnore]

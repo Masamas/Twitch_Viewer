@@ -112,7 +112,7 @@ namespace Twitch_Viewer
             }
         }
 
-        private static List<string> quality;
+        private static List<string> quality = new List<string>() { "low", "medium", "high", "source" };
         public static List<string> Quality
         {
             get
@@ -131,32 +131,6 @@ namespace Twitch_Viewer
                 OnPropertyChanged("SelectedQuality");
             }
         }
-
-        #region Settings
-        private string livestreamerArgs = "";
-        public string LivestreamerArgs
-        {
-            get { return livestreamerArgs; }
-            set
-            {
-                livestreamerArgs = value;
-            }
-        }
-
-        private int refreshInterval = 60;
-        public string RefreshInterval
-        {
-            get { return refreshInterval.ToString(); }
-            set
-            {
-                var tmp = int.Parse(value);
-                if (tmp < 5)
-                    refreshInterval = 5;
-                else
-                    refreshInterval = tmp;
-            }
-        }
-        #endregion
 
         private double fillHeight;
         public double FillHeight
@@ -186,22 +160,18 @@ namespace Twitch_Viewer
         {
             settings = ((App)Application.Current).settings;
 
-            refreshInterval = settings.RefreshInterval;
-            livestreamerArgs = settings.LivestreamerArgs;
-
             ItemsOnline = new ObservableCollection<StreamItem>();
             ItemsOffline = new ObservableCollection<StreamItem>();
             Games = new ObservableCollection<GameItem>();
             GameStreams = new ObservableCollection<StreamItem>();
             Channels = new ObservableCollection<StreamItem>();
 
-            quality = new List<string>() { "low", "medium", "high", "source" };
-
             InitializeComponent();
 
             this.DataContext = this;
 
             statsTab.DataContext = settings;
+            settingsTab.DataContext = settings;
 
             ShowDebugSettings();
 
@@ -251,7 +221,7 @@ namespace Twitch_Viewer
         {
             while (true)
             {
-                await Task.Delay(refreshInterval * 1000);
+                await Task.Delay(settings.RefreshInterval * 1000);
 
                 foreach (StreamItem item in itemsOnline)
                     refreshStreamItem(item);
@@ -357,7 +327,7 @@ namespace Twitch_Viewer
             if (!checkStreamLink(link))
                 return;
 
-            string args = LivestreamerArgs != null && LivestreamerArgs.Length != 0 ? $"{LivestreamerArgs} {link} {SelectedQuality}" : $"{link} {SelectedQuality}";
+            string args = settings.LivestreamerArgs != null && settings.LivestreamerArgs.Length != 0 ? $"{settings.LivestreamerArgs} {link} {SelectedQuality}" : $"{link} {SelectedQuality}";
 
             Process p = Process.Start(@"C:\program files (x86)\Livestreamer\livestreamer.exe", args);
         }
@@ -733,7 +703,7 @@ namespace Twitch_Viewer
         {
             var streamItem = (StreamItem)(sender as Grid).DataContext;
 
-            streamItem.StartStream(SelectedQuality, LivestreamerArgs, this);
+            streamItem.StartStream(SelectedQuality, settings.LivestreamerArgs, this);
         }
 
         private void Grid_PreviewKeyDown(object sender, KeyEventArgs e)
