@@ -66,15 +66,21 @@ namespace Twitch_Viewer
         
         private static void MoveVlcWindows(List<IntPtr> windows)
         {
-            var workArea = SystemParameters.WorkArea;
-            int width = (int)workArea.Width / 3;
+            // values if Taskbar is visible
+            //var workArea = SystemParameters.WorkArea;
+            //int width = (int)workArea.Width / 3;
+            //int height = (int)(width * 0.5625);
+
+            int width = (int)SystemParameters.PrimaryScreenWidth / 3;
             int height = (int)(width * 0.5625);
+            int xPos = (int)SystemParameters.PrimaryScreenWidth - width;
+            int yPos = (int)SystemParameters.PrimaryScreenHeight - height;
 
             if (windows.Count < 1)
                 return;
 
             foreach (IntPtr hWnd in windows)
-                MoveWindow(hWnd, (int)workArea.Width - width, (int)workArea.Height - height, width, height + 1, true);
+                MoveWindow(hWnd, xPos, yPos, width, height + 1, true);
         }
     }
 }
