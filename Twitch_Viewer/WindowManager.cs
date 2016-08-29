@@ -5,53 +5,76 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Diagnostics;
+using System.Threading;
+using System.Collections.ObjectModel;
 
 namespace Twitch_Viewer
 {
-    public class WindowManager
+    public static class VlcWindowManager
     {
-        [DllImport("user32.dll")]
-        static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
         [DllImport("user32.dll")]
         static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
 
         [DllImport("user32.dll")]
-        static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+        static extern bool EnumWindows(EnumWindowsProc enumProc, IntPtr lParam);
 
         [DllImport("user32.dll")]
-        static extern IntPtr WindowFromPoint(int xPoint, int yPoint);
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder strText, int maxCount);
 
-        public void moveCalc()
+        [DllImport("user32.dll")]
+        static extern int GetWindowTextLength(IntPtr hWnd);
+
+        public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+        public static List<IntPtr> GetVlcHandles()
         {
-            IntPtr hWnd = FindWindow(null, "Rechner");
+            List<IntPtr> windows = new List<IntPtr>();
 
-            MoveWindow(hWnd, 100, 200, 300, 300, true);
+            EnumWindows(delegate (IntPtr wnd, IntPtr param)
+            {
+                int size = GetWindowTextLength(wnd);
+                if (size > 0)
+                {
+                    var builder = new StringBuilder(size + 1);
+                    GetWindowText(wnd, builder, builder.Capacity);
+                    var title = builder.ToString();
+                    if (title == "VLC (Direct3D output)")
+                        windows.Add(wnd);
+                }
+
+                return true;
+            }, IntPtr.Zero);
+
+            return windows;
         }
 
-        public void GetHwndFromPoint()
+        public static async Task TryMoveNewVlcWindows(int oldCount)
         {
-            IntPtr hWnd = WindowFromPoint(100, 100);
+            for (int i = 0; i < 200; i++)
+            {
+                await Task.Delay(100);
 
-            MoveWindow(hWnd, 100, 200, 200, 200, true);
+                var vlcWindows = GetVlcHandles();
+                if (vlcWindows.Count > oldCount)
+                {
+                    MoveVlcWindows(vlcWindows);
+                    break;
+                }
+            }
         }
-
-        public void GetHwndFromClassName()
+        
+        private static void MoveVlcWindows(List<IntPtr> windows)
         {
-            StringBuilder buffer = new StringBuilder(128);
+            var workArea = SystemParameters.WorkArea;
+            int width = (int)workArea.Width / 3;
+            int height = (int)(width * 0.5625);
 
-            IntPtr hWnd = FindWindow(null, "VLC (Direct3D output)");
+            if (windows.Count < 1)
+                return;
 
-            GetClassName(hWnd, buffer, buffer.Capacity);
-
-            MessageBox.Show($"VLC Class Name: {buffer.ToString()}");
-        }
-
-        public void GetHwndFromWindowTitle()
-        {
-            IntPtr hWnd = FindWindow(null, "VLC (Direct3D output)");
-
-            MoveWindow(hWnd, 100, 200, 200, 200, true);
+            foreach (IntPtr hWnd in windows)
+                MoveWindow(hWnd, (int)workArea.Width - width, (int)workArea.Height - height, width, height + 1, true);
         }
     }
 }

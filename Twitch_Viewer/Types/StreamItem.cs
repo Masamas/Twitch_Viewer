@@ -95,9 +95,13 @@ namespace Twitch_Viewer.Types
 
         public void StartOverlayStream(string livestreamerArgs, MainWindow startWindow)
         {
-            livestreamerArgs += $"--player=\"vlc --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top --zoom={MainWindow.settings.Zoom} --video-x={MainWindow.settings.PiPXCoord} --video-y={MainWindow.settings.PiPYCoord}\"";
+            livestreamerArgs += $"--player=\"vlc --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+
+            var oldCount = VlcWindowManager.GetVlcHandles().Count;
 
             StartStream(MainWindow.settings.PiPQuality, livestreamerArgs, startWindow);
+
+            VlcWindowManager.TryMoveNewVlcWindows(oldCount);
         }
 
         private void addViewStats(DateTime start, TimeSpan duration)
