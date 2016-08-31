@@ -99,11 +99,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DebugSettingsWindow.xaml.cs">
-      <DependentUpon>DebugSettingsWindow.xaml</DependentUpon>
+    <Compile Include="DebugSettings\DebugSettingsItems.cs" />
+    <Compile Include="DebugSettings\DebugSettingsWindow.xaml.cs">
+      <DependentUpon>DebugSettings\DebugSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="DirectoryHandler.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="RelayCommand.cs" />
     <Compile Include="StatsWindow.xaml.cs">
       <DependentUpon>StatsWindow.xaml</DependentUpon>
     </Compile>
@@ -120,7 +122,7 @@
       <DependentUpon>UsernameDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Types\StreamStatsItem.cs" />
-    <Page Include="DebugSettingsWindow.xaml">
+    <Page Include="DebugSettings\DebugSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

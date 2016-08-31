@@ -172,6 +172,9 @@ namespace Twitch_Viewer
             get { return gameStats; }
             set { gameStats = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
         }
+
+        [XmlIgnore]
+        public Dictionary<string, DebugSettingsItem> DebugSettings { get; } = new Dictionary<string, DebugSettingsItem>();
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
