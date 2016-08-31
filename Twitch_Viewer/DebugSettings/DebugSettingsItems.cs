@@ -74,9 +74,9 @@ namespace Twitch_Viewer
 
         public string ButtonText { get; }
 
-        public delegate void buttonActionDelegate(object parameters);
+        public delegate void buttonActionDelegate(params object[] parameters);
 
-        public DebugSettingButton(string description, string buttonText, buttonActionDelegate action, object actionParameters)
+        public DebugSettingButton(string description, string buttonText, buttonActionDelegate action, params object[] actionParameters)
             : base(description)
         {
             _buttonAction = action;
