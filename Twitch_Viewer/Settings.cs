@@ -116,6 +116,8 @@ namespace Twitch_Viewer
             set { pipQuality = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
         }
 
+        public bool[] ArgumentsArray { get; } = new bool[] { true, false, false, false, false, false, false, false };
+
         [XmlIgnore]
         public TimeSpan TotalRunTime
         {

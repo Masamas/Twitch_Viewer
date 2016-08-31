@@ -109,7 +109,24 @@ namespace Twitch_Viewer.Types
 
         public void StartOverlayStream(string livestreamerArgs, MainWindow startWindow)
         {
-            livestreamerArgs += $"--player=\"vlc --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            if (MainWindow.settings.ArgumentsArray[0])
+                livestreamerArgs += "--player-args \"--no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top {filename}\"";
+            else if (MainWindow.settings.ArgumentsArray[1])
+                livestreamerArgs += "--player-args=\"--no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top {filename}\"";
+            else if (MainWindow.settings.ArgumentsArray[2])
+                livestreamerArgs += "--player=\"\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            else if (MainWindow.settings.ArgumentsArray[3])
+                livestreamerArgs += "--player \"\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            else if (MainWindow.settings.ArgumentsArray[4])
+                livestreamerArgs += "--player \"\\\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\\\" --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            else if (MainWindow.settings.ArgumentsArray[5])
+                livestreamerArgs += "--player=\"'C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe' --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            else if (MainWindow.settings.ArgumentsArray[6])
+                livestreamerArgs += "--player \"'C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe' --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            else if (MainWindow.settings.ArgumentsArray[7])
+                livestreamerArgs += "--player=\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            else if (MainWindow.settings.ArgumentsArray[8])
+                livestreamerArgs += "--player \"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
 
             //var oldCount = VlcWindowManager.GetVlcHandles().Count;
 
