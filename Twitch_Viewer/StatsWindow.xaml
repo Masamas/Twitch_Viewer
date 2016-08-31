@@ -86,37 +86,37 @@
                     </Style>
                 </StackPanel.Resources>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding MondayValue, StringFormat=F}" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding MondayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
                     <Rectangle Height="{Binding MondayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Monday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding TuesdayValue, StringFormat=F}" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding TuesdayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
                     <Rectangle Height="{Binding TuesdayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Tuesday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding WednesdayValue, StringFormat=F}" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding WednesdayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
                     <Rectangle Height="{Binding WednesdayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Wednesday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding ThursdayValue, StringFormat=F}" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding ThursdayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
                     <Rectangle Height="{Binding ThursdayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Thursday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding FridayValue, StringFormat=F}" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding FridayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
                     <Rectangle Height="{Binding FridayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Friday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding SaturdayValue, StringFormat=F}" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding SaturdayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
                     <Rectangle Height="{Binding SaturdayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Saturday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding SundayValue, StringFormat=F}" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding SundayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
                     <Rectangle Height="{Binding SundayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Sunday" />
                 </StackPanel>
