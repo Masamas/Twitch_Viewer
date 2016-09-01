@@ -5,6 +5,9 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 using System.Windows;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Twitch_Viewer.Types
 {
@@ -12,6 +15,8 @@ namespace Twitch_Viewer.Types
     {
         private const string heartImageBlack = "/Twitch_Viewer;component/imageResources/HeartBlack.png";
         private const string heartImageRed = "/Twitch_Viewer;component/imageResources/HeartBorder.png";
+
+        EventHook hook;
 
         private string name;
         public string Name { get { return name; } set { name = value; OnPropertyChanged(MethodInfo.GetCurrentMethod()); } }
@@ -38,6 +43,15 @@ namespace Twitch_Viewer.Types
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        [DllImport("user32.dll")]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder strText, int maxCount);
+
+        [DllImport("user32.dll")]
+        static extern int GetWindowTextLength(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
 
         public StreamItem(string name, string displayName, string curGame, string preview, string viewers)
         {
@@ -95,13 +109,56 @@ namespace Twitch_Viewer.Types
 
         public void StartOverlayStream(string livestreamerArgs, MainWindow startWindow)
         {
-            livestreamerArgs += $"--player=\"vlc --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            if (MainWindow.settings.ArgumentsArray[0])
+                livestreamerArgs += "--player-args \"--no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top {filename}\"";
+            else if (MainWindow.settings.ArgumentsArray[1])
+                livestreamerArgs += "--player-args=\"--no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top {filename}\"";
+            else if (MainWindow.settings.ArgumentsArray[2])
+                livestreamerArgs += "--player=\"\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            else if (MainWindow.settings.ArgumentsArray[3])
+                livestreamerArgs += "--player \"\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\" --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            else if (MainWindow.settings.ArgumentsArray[4])
+                livestreamerArgs += "--player \"\\\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe\\\" --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            else if (MainWindow.settings.ArgumentsArray[5])
+                livestreamerArgs += "--player=\"'C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe' --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            else if (MainWindow.settings.ArgumentsArray[6])
+                livestreamerArgs += "--player \"'C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe' --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            else if (MainWindow.settings.ArgumentsArray[7])
+                livestreamerArgs += "--player=\"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
+            else if (MainWindow.settings.ArgumentsArray[8])
+                livestreamerArgs += "--player \"C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe --no-video-deco --no-embedded-video --qt-start-minimized --qt-notification=0 --video-on-top\"";
 
-            var oldCount = VlcWindowManager.GetVlcHandles().Count;
+            //var oldCount = VlcWindowManager.GetVlcHandles().Count;
 
             StartStream(MainWindow.settings.PiPQuality, livestreamerArgs, startWindow);
 
-            VlcWindowManager.TryMoveNewVlcWindows(oldCount);
+            hook = new EventHook(OnWindowCreate, EventHook.EVENT_OBJECT_CREATE);
+
+            //VlcWindowManager.TryMoveNewVlcWindows(oldCount);
+        }
+
+        public async void OnWindowCreate(IntPtr hWinEventHook, uint eventType, IntPtr hWnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
+        {
+            int size = GetWindowTextLength(hWnd);
+            if (size > 0)
+            {
+                var builder = new StringBuilder(size + 1);
+                GetWindowText(hWnd, builder, builder.Capacity);
+                var title = builder.ToString();
+
+                if (title == "VLC (VLC Video Output)")
+                {
+                    int width = (int)SystemParameters.PrimaryScreenWidth / 3;
+                    int height = (int)(width * 0.5625);
+                    int xPos = (int)SystemParameters.PrimaryScreenWidth - width;
+                    int yPos = (int)SystemParameters.PrimaryScreenHeight - height;
+
+                    await Task.Delay(100);
+                    MoveWindow(hWnd, xPos, yPos, width, height + 1, true);
+                    hook.Stop();
+                    hook = null;
+                }
+            }
         }
 
         private void addViewStats(DateTime start, TimeSpan duration)

@@ -104,6 +104,7 @@
     </Compile>
     <Compile Include="DirectoryHandler.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Hooks.cs" />
     <Compile Include="StatsWindow.xaml.cs">
       <DependentUpon>StatsWindow.xaml</DependentUpon>
     </Compile>
@@ -120,7 +121,8 @@
       <DependentUpon>UsernameDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Types\StreamStatsItem.cs" />
-    <Compile Include="WindowManager.cs" />
+    <Compile Include="VlcWindowManager.cs" />
+    <Compile Include="EventHook.cs" />
     <Page Include="DebugSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
