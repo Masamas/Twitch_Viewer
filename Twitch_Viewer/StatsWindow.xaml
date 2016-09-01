@@ -38,7 +38,8 @@
             <TextBlock Text="Gesamtzahl an Views" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,20,0,0" />
             <TextBlock Text="{Binding ViewCount}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,18,0" />
         </Grid>
-        <Grid DockPanel.Dock="Bottom" Margin="0,0,18,0">
+        <!-- Graph -->
+        <Grid DockPanel.Dock="Bottom" Margin="0,0,18,0" DataContext="{Binding Graph}">
             <Grid Margin="0,5,0,0"> <!-- Scale -->
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20" />

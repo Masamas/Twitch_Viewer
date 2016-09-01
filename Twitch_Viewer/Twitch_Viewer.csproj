@@ -110,6 +110,7 @@
     <Compile Include="Types\GameItem.cs" />
     <Compile Include="Types\GameStatsItem.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Types\GraphItem.cs" />
     <Compile Include="Types\StatsItem.cs" />
     <Compile Include="Types\StreamItem.cs" />
     <Compile Include="StreamItemHelper.cs" />
