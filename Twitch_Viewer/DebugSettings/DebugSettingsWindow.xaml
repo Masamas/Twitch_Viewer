@@ -23,7 +23,10 @@
                             <TextBox Text="{Binding TextBoxText}" Width="60" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="{Binding IsTextBoxVisible}" />
                             <TextBox Text="{Binding Value}" Width="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,70,0" Visibility="{Binding IsValueBoxVisible}" />
                             <Button Content="{Binding ButtonText}" Width="60" Command="{Binding ButtonActionCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="{Binding IsButtonVisible}" />
-                            <Rectangle Height="1" Fill="Black" Margin="0,0,0,5" Visibility="{Binding IsSeparatorVisible}" />
+                            <Grid Visibility="{Binding IsSeparatorVisible}">
+                                <Rectangle Height="1" Fill="Black" Margin="0,5,0,0" VerticalAlignment="Top"/>
+                                <TextBlock Text="{Binding Header}" FontFamily="Arial Black" FontWeight="Bold" Margin="0,15,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Visibility="{Binding HasHeader}" />
+                            </Grid>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

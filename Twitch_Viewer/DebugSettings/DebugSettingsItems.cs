@@ -131,9 +131,20 @@ namespace Twitch_Viewer
 
     public class DebugSettingSeparator : DebugSettingsItem
     {
+        public string Header { get; set; }
+        public Visibility HasHeader { get; set; } = Visibility.Collapsed;
+
         public DebugSettingSeparator()
             : base()
         {
+            IsSeparatorVisible = Visibility.Visible;
+        }
+
+        public DebugSettingSeparator(string header)
+            : base()
+        {
+            Header = header;
+            HasHeader = Visibility.Visible;
             IsSeparatorVisible = Visibility.Visible;
         }
     }

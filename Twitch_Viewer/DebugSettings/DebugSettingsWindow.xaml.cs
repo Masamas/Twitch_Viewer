@@ -19,13 +19,14 @@ namespace Twitch_Viewer
         {
             InitializeComponent();
 
+            DebugSettingsItems.Add(new DebugSettingSeparator("StreamStats Debugging"));
             DebugSettingsItems.Add(new DebugSettingTextBox("username", "Username for debugging options:"));
             DebugSettingsItems.Add(new DebugSettingButtonWithValue("randomUserStatsCount", "Adds random stats to the user given above.", "Do!", addRandomUserStats, 10.ToString(), null));
             DebugSettingsItems.Add(new DebugSettingButton("Remove all stats from the user given above.", "Do!", removeUserStats, null));
             DebugSettingsItems.Add(new DebugSettingButtonWithValue("userViewTime", "Add View Time to user given above.", "Do!", addViewTimeToUser, TimeSpan.Zero.ToString(), null));
             DebugSettingsItems.Add(new DebugSettingButton("Generate random user time interval", "Generate!", generateRandomUserViewTime, null));
             DebugSettingsItems.Add(new DebugSettingButtonWithValue("userViewCount", "Add View Count to user given above.", "Do!", addViewCountToUser, 1.ToString(), null));
-            DebugSettingsItems.Add(new DebugSettingSeparator());
+            DebugSettingsItems.Add(new DebugSettingSeparator("GameStats Debugging"));
             DebugSettingsItems.Add(new DebugSettingTextBox("game", "Game for debugging options:"));
             DebugSettingsItems.Add(new DebugSettingButtonWithValue("randomGameStatsCount", "Adds random stats to the game given above.", "Do!", addRandomGameStats, 10.ToString(), null));
             DebugSettingsItems.Add(new DebugSettingButton("Remove all stats from the game given above.", "Do!", removeGameStats, null));
