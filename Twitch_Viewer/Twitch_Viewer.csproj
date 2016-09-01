@@ -101,7 +101,7 @@
     </ApplicationDefinition>
     <Compile Include="DebugSettings\DebugSettingsItems.cs" />
     <Compile Include="DebugSettings\DebugSettingsWindow.xaml.cs">
-      <DependentUpon>DebugSettings\DebugSettingsWindow.xaml</DependentUpon>
+      <DependentUpon>DebugSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="DirectoryHandler.cs" />
     <Compile Include="Extensions.cs" />
