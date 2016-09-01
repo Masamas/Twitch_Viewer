@@ -22,6 +22,7 @@
                             <CheckBox IsChecked="{Binding CheckBoxChecked}" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="{Binding IsCheckBoxVisible}" />
                             <TextBox Text="{Binding TextBoxText}" MinWidth="60" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="{Binding IsTextBoxVisible}" />
                             <Button Content="{Binding ButtonText}" Command="{Binding ButtonActionCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="{Binding IsButtonVisible}" />
+                            <Rectangle Height="1" Fill="Black" Margin="0,0,0,5" Visibility="{Binding IsSeparatorVisible}" />
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

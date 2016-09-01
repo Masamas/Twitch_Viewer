@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Twitch_Viewer
 {
@@ -31,6 +21,7 @@ namespace Twitch_Viewer
             DebugSettingsItems.Add(new DebugSettingTextBox("randomStatsCount", "Number of Random Stats to add:"));
             DebugSettingsItems.Add(new DebugSettingButton("Adds random stats to the user given above.", "Do!", addRandomStats, null));
             DebugSettingsItems.Add(new DebugSettingButton("Remove all stats from the user given above.", "Do!", removeStats, null));
+            DebugSettingsItems.Add(new DebugSettingSeparator());
             DebugSettingsItems.Add(new DebugSettingButton("Show Debug settings status.", "Show!", showStatus, null));
         }
 

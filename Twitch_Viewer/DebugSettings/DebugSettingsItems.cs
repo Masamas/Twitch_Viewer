@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -15,6 +12,7 @@ namespace Twitch_Viewer
         public Visibility IsCheckBoxVisible { get; set; } = Visibility.Collapsed;
         public Visibility IsTextBoxVisible { get; set; } = Visibility.Collapsed;
         public Visibility IsButtonVisible { get; set; } = Visibility.Collapsed;
+        public Visibility IsSeparatorVisible { get; set; } = Visibility.Collapsed;
 
         protected DebugSettingsItem(string settingName, string description)
         {
@@ -26,6 +24,10 @@ namespace Twitch_Viewer
         protected DebugSettingsItem(string description)
         {
             Description = description;
+        }
+
+        protected DebugSettingsItem()
+        {
         }
     }
 
@@ -87,10 +89,12 @@ namespace Twitch_Viewer
         }
     }
 
-    public enum DebugSettingsKind
+    public class DebugSettingSeparator : DebugSettingsItem
     {
-        CheckBox,
-        TextBox,
-        Button
+        public DebugSettingSeparator()
+            : base()
+        {
+            IsSeparatorVisible = Visibility.Visible;
+        }
     }
 }
