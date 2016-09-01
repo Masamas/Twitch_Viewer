@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Twitch_Viewer"
         mc:Ignorable="d"
-        Title="DebugSettingsWindow" Height="300" Width="300">
+        Title="DebugSettingsWindow" Height="600" Width="400" SizeToContent="Height">
     <Grid>
         <StackPanel>
             <Label Content="Debug Settings" FontFamily="Arial Black" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" />
@@ -17,11 +17,12 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid Margin="5,10,10,0">
+                        <Grid Margin="5,0,10,10">
                             <TextBlock Text="{Binding Description}" HorizontalAlignment="Left" />
                             <CheckBox IsChecked="{Binding CheckBoxChecked}" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="{Binding IsCheckBoxVisible}" />
-                            <TextBox Text="{Binding TextBoxText}" MinWidth="60" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="{Binding IsTextBoxVisible}" />
-                            <Button Content="{Binding ButtonText}" Command="{Binding ButtonActionCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="{Binding IsButtonVisible}" />
+                            <TextBox Text="{Binding TextBoxText}" Width="60" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="{Binding IsTextBoxVisible}" />
+                            <TextBox Text="{Binding Value}" Width="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,70,0" Visibility="{Binding IsValueBoxVisible}" />
+                            <Button Content="{Binding ButtonText}" Width="60" Command="{Binding ButtonActionCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="{Binding IsButtonVisible}" />
                             <Rectangle Height="1" Fill="Black" Margin="0,0,0,5" Visibility="{Binding IsSeparatorVisible}" />
                         </Grid>
                     </DataTemplate>
