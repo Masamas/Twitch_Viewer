@@ -77,6 +77,8 @@ namespace Twitch_Viewer
         private string livestreamerArgs = "";
         private int refreshInterval = 60;
         private TimeSpan totalRunTime;
+        private bool disableNullCheck;
+        private bool disableProcessKill;
 
         private ObservableCollection<StreamStatsItem> streamStats = new ObservableCollection<StreamStatsItem>();
         private ObservableCollection<GameStatsItem> gameStats = new ObservableCollection<GameStatsItem>();
@@ -106,6 +108,18 @@ namespace Twitch_Viewer
         public List<string> Quality
         {
             get { return MainWindow.Quality; }
+        }
+
+        public bool DisableNullCheck
+        {
+            get { return disableNullCheck; }
+            set { disableNullCheck = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
+        }
+
+        public bool DisableProcessKill
+        {
+            get { return disableProcessKill; }
+            set { disableProcessKill = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
         }
 
         [XmlIgnore]

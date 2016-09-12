@@ -386,6 +386,14 @@
                                 <Label Content="Refresh Interval (s):" HorizontalAlignment="Left" />
                                 <TextBox Text="{Binding Path=RefreshInterval}" Width="80" HorizontalAlignment="Right" />
                             </Grid>
+                            <Grid>
+                                <Label Content="Disable Null Check" HorizontalAlignment="Left" />
+                                <CheckBox IsChecked="{Binding DisableNullCheck}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                            </Grid>
+                            <Grid>
+                                <Label Content="Disable Process Kill" HorizontalAlignment="Left" />
+                                <CheckBox IsChecked="{Binding DisableProcessKill}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                            </Grid>
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
