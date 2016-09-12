@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Xml;
 using System.Xml.Serialization;
@@ -27,7 +25,7 @@ namespace Twitch_Viewer.Types
         public TimeSpan ViewTime { get { return viewTime; } set { viewTime = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); } }
         public string ViewTimeString { get { return XmlConvert.ToString(viewTime); } set { viewTime = XmlConvert.ToTimeSpan(value); OnPropertyChanged(MethodBase.GetCurrentMethod()); } }
         public int ViewCount { get { return viewCount; } set { viewCount = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); } }
-        public ObservableCollection<ViewTimeData> ViewTimeData { get { viewTimeData.Sort(item => item.Start); return viewTimeData; } set { viewTimeData = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); BindingOperations.EnableCollectionSynchronization(ViewTimeData, lockObjectViewTimeData); } }
+        public ObservableCollection<ViewTimeData> ViewTimeData { get { return viewTimeData; } set { viewTimeData = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); BindingOperations.EnableCollectionSynchronization(ViewTimeData, lockObjectViewTimeData); } }
 
         #region GraphProperties
         #region GraphHeight
@@ -89,6 +87,28 @@ namespace Twitch_Viewer.Types
         public StatsItem()
         {
             ViewTimeData = new ObservableCollection<ViewTimeData>();
+            ViewTimeData.CollectionChanged += NotifyGraphOnStatsAdded;
+        }
+
+        private void NotifyGraphOnStatsAdded(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                OnPropertyChanged("MondayHeight");
+                OnPropertyChanged("TuesdayHeight");
+                OnPropertyChanged("WednesdayHeight");
+                OnPropertyChanged("ThursdayHeight");
+                OnPropertyChanged("FridayHeight");
+                OnPropertyChanged("SaturdayHeight");
+                OnPropertyChanged("SundayHeight");
+                OnPropertyChanged("MondayValue");
+                OnPropertyChanged("TuesdayValue");
+                OnPropertyChanged("WednesdayValue");
+                OnPropertyChanged("ThursdayValue");
+                OnPropertyChanged("FridayValue");
+                OnPropertyChanged("SaturdayValue");
+                OnPropertyChanged("SundayValue");
+            }
         }
 
         private double calcDayStats(DayOfWeek day)

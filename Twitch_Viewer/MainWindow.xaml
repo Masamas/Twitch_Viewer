@@ -321,12 +321,12 @@
                             </Grid>
                             <TextBlock Text="StreamStats" FontFamily="Arial Black" FontWeight="Bold" FontSize="14" Margin="5,10,0,0" />
                             <Grid Margin="5,10,5,10">
-                                <TextBlock Text="Name" FontWeight="Bold" MouseLeftButtonUp="StatsSortByName"/>
+                                <TextBlock Text="Name" FontWeight="Bold" HorizontalAlignment="Left" MouseLeftButtonUp="StatsSortByName"/>
                                 <Image x:Name="NameSortArrow" Source="imageResources/DownArrowInactive.png" Stretch="None" HorizontalAlignment="Left" Margin="40,0,0,0" MouseLeftButtonUp="StatsSortByName" />
                                 <TextBlock Text="ViewCount" FontWeight="Bold" HorizontalAlignment="Center" MouseLeftButtonUp="StatsSortByViewCount"/>
                                 <Image x:Name="ViewCountSortArrow" Source="imageResources/DownArrowInactive.png" Stretch="None" HorizontalAlignment="Center" Margin="85,0,0,0" MouseLeftButtonUp="StatsSortByViewCount" />
                                 <TextBlock Text="ViewTime" FontWeight="Bold" HorizontalAlignment="Right" Margin="0,0,120,0" MouseLeftButtonUp="StatsSortByViewTime" />
-                                <Image x:Name="ViewTimeSortArrow" Source="imageResources/DownArrow.png" Stretch="None" HorizontalAlignment="Right" Margin="0,0,95,0" MouseLeftButtonUp="StatsSortByViewTime" />
+                                <Image x:Name="ViewTimeSortArrow" Source="imageResources/DownArrow.png" Stretch="None" HorizontalAlignment="Right" Margin="0,0,100,0" MouseLeftButtonUp="StatsSortByViewTime" />
                             </Grid>
                             <ItemsControl x:Name="viewTimeStats" Margin="0,0,0,0" Initialized="channelsListDirectory_Initialized" RequestBringIntoView="general_RequestBringIntoView">
                                 <ItemsControl.ItemsPanel>
@@ -422,6 +422,14 @@
                                 <RadioButton GroupName="Arguments" Content="--player= without quotes" IsChecked="{Binding Path=ArgumentsArray[7], Mode=TwoWay}" Margin="0,5,0,0" />
                                 <RadioButton GroupName="Arguments" Content="--player without quotes" IsChecked="{Binding Path=ArgumentsArray[8], Mode=TwoWay}" Margin="0,5,0,0" />
                             </StackPanel>
+                            <Grid>
+                                <Label Content="Disable Null Check" HorizontalAlignment="Left" />
+                                <CheckBox IsChecked="{Binding DisableNullCheck}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                            </Grid>
+                            <Grid>
+                                <Label Content="Disable Process Kill" HorizontalAlignment="Left" />
+                                <CheckBox IsChecked="{Binding DisableProcessKill}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                            </Grid>
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
