@@ -11,7 +11,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 using TwixelAPI;
 using System.ComponentModel;
-using System.Collections.Specialized;
 using System.Windows.Media.Imaging;
 using Twitch_Viewer.Types;
 using System.Windows.Media;

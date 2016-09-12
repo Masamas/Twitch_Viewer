@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using System.Windows.Data;
 using System.Xml;
 using System.Xml.Serialization;
 using Twitch_Viewer.Types;
@@ -82,6 +81,8 @@ namespace Twitch_Viewer
         private int pipYCoord;
         private string pipQuality = "high";
         private TimeSpan totalRunTime;
+        private bool disableNullCheck;
+        private bool disableProcessKill;
 
         private ObservableCollection<StreamStatsItem> streamStats = new ObservableCollection<StreamStatsItem>();
         private ObservableCollection<GameStatsItem> gameStats = new ObservableCollection<GameStatsItem>();
@@ -135,6 +136,18 @@ namespace Twitch_Viewer
         {
             get { return pipQuality; }
             set { pipQuality = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
+        }
+
+        public bool DisableNullCheck
+        {
+            get { return disableNullCheck; }
+            set { disableNullCheck = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
+        }
+
+        public bool DisableProcessKill
+        {
+            get { return disableProcessKill; }
+            set { disableProcessKill = value; OnPropertyChanged(MethodBase.GetCurrentMethod()); }
         }
 
         [XmlIgnore]

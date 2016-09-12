@@ -3,8 +3,6 @@ using System.Linq;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
-using System.Windows.Media.Imaging;
-using System.Windows;
 
 namespace Twitch_Viewer.Types
 {
@@ -86,7 +84,10 @@ namespace Twitch_Viewer.Types
 
             loadingDialog.Closing += (dSender, dArgs) =>
             {
-                if (p?.HasExited != true)
+                if (p == null && !MainWindow.settings.DisableNullCheck)
+                    throw new Exception("process object is null. Error might be here.");
+
+                if (p?.HasExited != true && !MainWindow.settings.DisableProcessKill)
                     p?.Kill();
             };
 
