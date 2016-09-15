@@ -802,6 +802,12 @@ namespace Twitch_Viewer
 
                 window = new StatsWindow(item);
             }
+            else if ((sender as Button).DataContext is GameStatsItem)
+            {
+                var item = (sender as Button).DataContext as GameStatsItem;
+
+                window = new StatsWindow(item);
+            }
 
             
             window?.Show();

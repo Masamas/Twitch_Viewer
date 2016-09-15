@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Twitch_Viewer"
         mc:Ignorable="d"
-        Title="Stats" Height="562" Width="458" ResizeMode="NoResize">
+        Title="Stats" Height="582" Width="458" ResizeMode="NoResize">
     <DockPanel Margin="5">
         <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" FontWeight="Bold" FontSize="16" />
         <Grid DockPanel.Dock="Top" Margin="0,5,0,5">
@@ -40,7 +40,8 @@
         </Grid>
         <!-- Graph -->
         <Grid DockPanel.Dock="Bottom" Margin="0,0,18,0" DataContext="{Binding Graph}">
-            <Grid Margin="0,5,0,0"> <!-- Scale -->
+            <Grid Margin="0,5,0,0">
+                <!-- Scale -->
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20" />
                     <RowDefinition Height="20" />
@@ -60,27 +61,29 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="100%" />
-                <Rectangle Grid.Row="0" Grid.Column="1" Height="1" Fill="Gray" />
+                <Rectangle Grid.Row="0" Grid.Column="1" Height="1" Stroke="Gray" StrokeDashArray="2 2" />
+                <!--<Line Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Stroke="Gray" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" />-->
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="90%" />
-                <Rectangle Grid.Row="1" Grid.Column="1" Height="1" Fill="Gray" />
+                <Rectangle Grid.Row="1" Grid.Column="1" Height="1" Stroke="Gray" StrokeDashArray="2 2" />
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="80%" />
-                <Rectangle Grid.Row="2" Grid.Column="1" Height="1" Fill="Gray" />
+                <Rectangle Grid.Row="2" Grid.Column="1" Height="1" Stroke="Gray" StrokeDashArray="2 2" />
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="70%" />
-                <Rectangle Grid.Row="3" Grid.Column="1" Height="1" Fill="Gray" />
+                <Rectangle Grid.Row="3" Grid.Column="1" Height="1" Stroke="Gray" StrokeDashArray="2 2" />
                 <TextBlock Grid.Row="4" Grid.Column="0" Text="60%" />
-                <Rectangle Grid.Row="4" Grid.Column="1" Height="1" Fill="Gray" />
+                <Rectangle Grid.Row="4" Grid.Column="1" Height="1" Stroke="Gray" StrokeDashArray="2 2" />
                 <TextBlock Grid.Row="5" Grid.Column="0" Text="50%" />
-                <Rectangle Grid.Row="5" Grid.Column="1" Height="1" Fill="Gray" />
+                <Rectangle Grid.Row="5" Grid.Column="1" Height="1" Stroke="Gray" StrokeDashArray="2 2" />
                 <TextBlock Grid.Row="6" Grid.Column="0" Text="40%" />
-                <Rectangle Grid.Row="6" Grid.Column="1" Height="1" Fill="Gray" />
+                <Rectangle Grid.Row="6" Grid.Column="1" Height="1" Stroke="Gray" StrokeDashArray="2 2" />
                 <TextBlock Grid.Row="7" Grid.Column="0" Text="30%" />
-                <Rectangle Grid.Row="7" Grid.Column="1" Height="1" Fill="Gray" />
+                <Rectangle Grid.Row="7" Grid.Column="1" Height="1" Stroke="Gray" StrokeDashArray="2 2" />
                 <TextBlock Grid.Row="8" Grid.Column="0" Text="20%" />
-                <Rectangle Grid.Row="8" Grid.Column="1" Height="1" Fill="Gray" />
+                <Rectangle Grid.Row="8" Grid.Column="1" Height="1" Stroke="Gray" StrokeDashArray="2 2" />
                 <TextBlock Grid.Row="9" Grid.Column="0" Text="10%" />
-                <Rectangle Grid.Row="9" Grid.Column="1" Height="1" Fill="Gray" />
+                <Rectangle Grid.Row="9" Grid.Column="1" Height="1" Stroke="Gray" StrokeDashArray="2 2" />
                 <TextBlock Grid.Row="10" Grid.Column="0" Text="0%" />
                 <Rectangle Grid.Row="10" Grid.Column="1" Height="1" Fill="Gray" />
+                <Rectangle Grid.Row="0" Grid.Column="0" Fill="Gray" Width="1" HorizontalAlignment="Right" Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}" />
             </Grid>
             <StackPanel Orientation="Horizontal" Margin="30,0,0,0">
                 <StackPanel.Resources>
@@ -89,38 +92,66 @@
                     </Style>
                 </StackPanel.Resources>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding MondayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
-                    <Rectangle Height="{Binding MondayHeight}" Width="20" Fill="Black" />
+                    <TextBlock Text="{Binding MondayValue, StringFormat=F}" HorizontalAlignment="Center">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="White" Opacity="0.5" />
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <Rectangle Name="MondayBar" Height="{Binding MondayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Monday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding TuesdayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
-                    <Rectangle Height="{Binding TuesdayHeight}" Width="20" Fill="Black" />
+                    <TextBlock Text="{Binding TuesdayValue, StringFormat=F}" HorizontalAlignment="Center">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="White" Opacity="0.5" />
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <Rectangle Name="TuesdayBar" Height="{Binding TuesdayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Tuesday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding WednesdayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
-                    <Rectangle Height="{Binding WednesdayHeight}" Width="20" Fill="Black" />
+                    <TextBlock Text="{Binding WednesdayValue, StringFormat=F}" HorizontalAlignment="Center">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="White" Opacity="0.5" />
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <Rectangle Name="WednesdayBar" Height="{Binding WednesdayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Wednesday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding ThursdayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
-                    <Rectangle Height="{Binding ThursdayHeight}" Width="20" Fill="Black" />
+                    <TextBlock Text="{Binding ThursdayValue, StringFormat=F}" HorizontalAlignment="Center">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="White" Opacity="0.5" />
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <Rectangle Name="ThursdayBar" Height="{Binding ThursdayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Thursday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding FridayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
-                    <Rectangle Height="{Binding FridayHeight}" Width="20" Fill="Black" />
+                    <TextBlock Text="{Binding FridayValue, StringFormat=F}" HorizontalAlignment="Center">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="White" Opacity="0.5" />
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <Rectangle Name="FridayBar" Height="{Binding FridayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Friday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding SaturdayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
-                    <Rectangle Height="{Binding SaturdayHeight}" Width="20" Fill="Black" />
+                    <TextBlock Text="{Binding SaturdayValue, StringFormat=F}" HorizontalAlignment="Center">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="White" Opacity="0.5" />
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <Rectangle Name="SaturdayBar" Height="{Binding SaturdayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Saturday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
-                    <TextBlock Text="{Binding SundayValue, StringFormat=F}" HorizontalAlignment="Center" Background="White" />
-                    <Rectangle Height="{Binding SundayHeight}" Width="20" Fill="Black" />
+                    <TextBlock Text="{Binding SundayValue, StringFormat=F}" HorizontalAlignment="Center">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="White" Opacity="0.5" />
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <Rectangle Name="SundayBar" Height="{Binding SundayHeight}" Width="20" Fill="Black" />
                     <TextBlock Text="Sunday" />
                 </StackPanel>
             </StackPanel>

@@ -104,6 +104,9 @@
     </Compile>
     <Compile Include="DirectoryHandler.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Graph.xaml.cs">
+      <DependentUpon>Graph.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StatsWindow.xaml.cs">
       <DependentUpon>StatsWindow.xaml</DependentUpon>
     </Compile>
@@ -122,6 +125,10 @@
     </Compile>
     <Compile Include="Types\StreamStatsItem.cs" />
     <Page Include="DebugSettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Graph.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

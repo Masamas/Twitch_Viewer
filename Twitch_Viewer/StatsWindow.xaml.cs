@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 using Twitch_Viewer.Types;
 
 namespace Twitch_Viewer
@@ -10,7 +12,7 @@ namespace Twitch_Viewer
     /// </summary>
     public partial class StatsWindow : Window
     {
-        public StatsWindow(StreamStatsItem stats)
+        public StatsWindow(StatsItem stats)
         {
             //Random rnd = new Random();
 
@@ -22,6 +24,52 @@ namespace Twitch_Viewer
             InitializeComponent();
 
             this.DataContext = stats;
+
+            DoWeekdayAnimations(stats);
+        }
+
+        private void DoWeekdayAnimations(StatsItem stats)
+        {
+            DoubleAnimation da = new DoubleAnimation();
+            da.From = 0;
+            da.Duration = new Duration(TimeSpan.FromSeconds(0.7));
+            da.DecelerationRatio = 0.3;
+            da.FillBehavior = FillBehavior.Stop;
+
+            var days = Enum.GetValues(typeof(DayOfWeek));
+            foreach (DayOfWeek day in days)
+            {
+                da.To = stats.calcDayStats(day) * 200;
+                DoWeekdayAnimation(da, day);
+            }
+        }
+
+        private void DoWeekdayAnimation(DoubleAnimation da, DayOfWeek day)
+        {
+            switch (day)
+            {
+                case DayOfWeek.Monday:
+                    MondayBar.BeginAnimation(Rectangle.HeightProperty, da);
+                    break;
+                case DayOfWeek.Tuesday:
+                    TuesdayBar.BeginAnimation(Rectangle.HeightProperty, da);
+                    break;
+                case DayOfWeek.Wednesday:
+                    WednesdayBar.BeginAnimation(Rectangle.HeightProperty, da);
+                    break;
+                case DayOfWeek.Thursday:
+                    ThursdayBar.BeginAnimation(Rectangle.HeightProperty, da);
+                    break;
+                case DayOfWeek.Friday:
+                    FridayBar.BeginAnimation(Rectangle.HeightProperty, da);
+                    break;
+                case DayOfWeek.Saturday:
+                    SaturdayBar.BeginAnimation(Rectangle.HeightProperty, da);
+                    break;
+                case DayOfWeek.Sunday:
+                    SundayBar.BeginAnimation(Rectangle.HeightProperty, da);
+                    break;
+            }
         }
     }
 }

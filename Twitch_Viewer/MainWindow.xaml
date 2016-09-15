@@ -343,7 +343,8 @@
                                         <Grid Height="20" Background="Transparent" Margin="5,10,5,0">
                                             <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
                                             <TextBlock Text="{Binding ViewCount, StringFormat='{}{0:00} mal angesehen'}" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                                            <TextBlock Text="{Binding ViewTime, StringFormat='{}{0:%d} Tage, {0:hh} Stunden, {0:mm} Minuten, {0:ss} Sekunden'}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,25,0" />
+                                            <TextBlock Text="{Binding ViewTime, StringFormat='{}{0:%d} Tage, {0:hh} Stunden, {0:mm} Minuten, {0:ss} Sekunden'}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,50,0" />
+                                            <Button Content="i" Width="20" HorizontalAlignment="Right" Margin="0,0,25,0" Click="statsButton_Click" />
                                             <Button Content="X" Width="20" HorizontalAlignment="Right" Foreground="Red" Click="deleteStatsButton_Click" />
                                         </Grid>
                                     </DataTemplate>
