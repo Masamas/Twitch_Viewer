@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Windows.Media.Imaging;
 using Twitch_Viewer.Types;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace Twitch_Viewer
 {
@@ -540,32 +541,120 @@ namespace Twitch_Viewer
         #region Filter
         private async Task filterGameList(string text)
         {
-            if (text.Length != 0)
+            //var filtered = games.Where(game => game.FullName.ToLower().StartsWith(text.ToLower()));
+            //GamesFiltered = new ObservableCollection<GameItem>(filtered);
+            //gameList.ItemsSource = GamesFiltered;
+
+
+            ListCollectionView view = CollectionViewSource.GetDefaultView(this.gameList.ItemsSource) as ListCollectionView;
+            Predicate<object> filterPred = new Predicate<object>(delegate (object obj)
             {
-                var filtered = games.Where(game => game.FullName.ToLower().StartsWith(text.ToLower()));
-                GamesFiltered = new ObservableCollection<GameItem>(filtered);
-                gameList.ItemsSource = GamesFiltered;
+                return (obj as GameItem).FullName.ToLower().StartsWith(text.ToLower());
+            });
+
+            foreach (object obj in view.SourceCollection)
+            {
+                ContentPresenter item = this.gameList.ItemContainerGenerator.ContainerFromItem(obj) as ContentPresenter;
+                if (item == null)
+                    continue;
+
+                // Invoke returns true if the data object should be displayed.
+                bool isFilteredIn = filterPred.Invoke(obj);
+
+                // If the data object should not be displayed, fade away the ListBoxItem.
+                bool fadeAway = !isFilteredIn;
+
+                FadeItem(item, fadeAway);
             }
-            else
-                gameList.ItemsSource = Games;
         }
 
-        private async Task filterStreamList(string text, ObservableCollection<StreamItem> listToFilter, ItemsControl listToChange)
+        private async Task filterStreamList(string text, ItemsControl listToChange)
         {
-            if (text.Length != 0)
+            //var filtered = listToFilter.Where(stream => stream.DisplayName.ToLower().StartsWith(text.ToLower()));
+            //StreamsFiltered = new ObservableCollection<StreamItem>(filtered);
+            //listToChange.ItemsSource = StreamsFiltered;
+
+            ListCollectionView view = CollectionViewSource.GetDefaultView(listToChange.ItemsSource) as ListCollectionView;
+            Predicate<object> filterPred = new Predicate<object>(delegate (object obj)
             {
-                var filtered = listToFilter.Where(stream => stream.DisplayName.ToLower().StartsWith(text.ToLower()));
-                StreamsFiltered = new ObservableCollection<StreamItem>(filtered);
-                listToChange.ItemsSource = StreamsFiltered;
+                return (obj as StreamItem).DisplayName.ToLower().StartsWith(text.ToLower());
+            });
+
+            foreach (object obj in view.SourceCollection)
+            {
+                ContentPresenter item = listToChange.ItemContainerGenerator.ContainerFromItem(obj) as ContentPresenter;
+                if (item == null)
+                    continue;
+
+                // Invoke returns true if the data object should be displayed.
+                bool isFilteredIn = filterPred.Invoke(obj);
+
+                // If the data object should not be displayed, fade away the ListBoxItem.
+                bool fadeAway = !isFilteredIn;
+
+                FadeItem(item, fadeAway);
+            }
+        }
+
+        private void FadeItem(ContentPresenter item, bool fadeAway)
+        {
+            if (!fadeAway)
+            {
+                // If the item is already visible, then do not process it.
+                if (item.Visibility == Visibility.Visible)
+                    return;
+
+                // The item must be visible for the animations
+                // applied to it to be seen.
+                item.Visibility = Visibility.Visible;
+            }
+
+            Duration duration = new Duration(TimeSpan.FromMilliseconds(300));
+
+            #region Create Opacity Animation
+
+            DoubleAnimation animOpacity = new DoubleAnimation();
+            animOpacity.From = fadeAway ? 1 : 0;
+            animOpacity.To = fadeAway ? 0 : 1;
+            animOpacity.Duration = duration;
+            animOpacity.FillBehavior = FillBehavior.Stop;
+
+            // Since the animations' FillBehavior are set to 'Stop' we need to collapse
+            // the item after the animations complete, so that it looks like the
+            // item actually disappeared.	
+            if (fadeAway)
+                animOpacity.Completed += delegate { item.Visibility = Visibility.Collapsed; };
+
+            #endregion // Create Opacity Animation
+
+            #region Create Width Animation
+
+            DoubleAnimation animWidth = new DoubleAnimation();
+            animWidth.From = fadeAway ? item.ActualWidth : 0;
+            if (fadeAway)
+            {
+                animWidth.To = 0;
             }
             else
-                listToChange.ItemsSource = listToFilter;
+            {
+                // Let the item measure itself as if it exists on-screen.
+                // Then use the generated height value as the target of the animation.
+                item.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+                animWidth.To = item.DesiredSize.Width;
+            }
+            animWidth.Duration = duration;
+            animWidth.FillBehavior = FillBehavior.Stop;
+
+            #endregion // Create Width Animation
+
+            item.BeginAnimation(ContentPresenter.OpacityProperty, animOpacity);
+            item.BeginAnimation(ContentPresenter.WidthProperty, animWidth);
         }
 
         private async void textBoxChannelsFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = sender as TextBox;
-            await filterStreamList(textBox.Text, Channels, channelsListDirectory);
+            await filterStreamList(textBox.Text, channelsListDirectory);
         }
 
         private async void textBoxDirectoryFilter_TextChanged(object sender, TextChangedEventArgs e)
@@ -574,7 +663,7 @@ namespace Twitch_Viewer
             if (gameList.IsVisible)
                 await filterGameList(textBox.Text);
             else if (streamListDirectory.IsVisible)
-                await filterStreamList(textBox.Text, GameStreams, streamListDirectory);
+                await filterStreamList(textBox.Text, streamListDirectory);
         }
         #endregion
         #region Stats
