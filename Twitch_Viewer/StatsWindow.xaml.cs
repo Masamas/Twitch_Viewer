@@ -30,10 +30,14 @@ namespace Twitch_Viewer
 
         private void DoWeekdayAnimations(StatsItem stats)
         {
+            ExponentialEase ease = new ExponentialEase();
+            ease.Exponent = 10;
+            ease.EasingMode = EasingMode.EaseOut;
+
             DoubleAnimation da = new DoubleAnimation();
             da.From = 0;
-            da.Duration = new Duration(TimeSpan.FromSeconds(0.7));
-            da.DecelerationRatio = 0.3;
+            da.Duration = new Duration(TimeSpan.FromSeconds(3));
+            da.EasingFunction = ease;
             da.FillBehavior = FillBehavior.Stop;
 
             var days = Enum.GetValues(typeof(DayOfWeek));
