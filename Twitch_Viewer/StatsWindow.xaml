@@ -91,13 +91,56 @@
                         <Setter Property="Margin" Value="5,0,5,0" />
                     </Style>
                 </StackPanel.Resources>
+                <StackPanel.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="MondayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding MondayHeight}" Duration="0:0:2">
+                                    <DoubleAnimation.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="TuesdayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding TuesdayHeight}" Duration="0:0:2">
+                                    <DoubleAnimation.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="WednesdayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding WednesdayHeight}" Duration="0:0:2">
+                                    <DoubleAnimation.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="ThursdayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding ThursdayHeight}" Duration="0:0:2">
+                                    <DoubleAnimation.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="FridayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding FridayHeight}" Duration="0:0:2">
+                                    <DoubleAnimation.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="SaturdayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding SaturdayHeight}" Duration="0:0:2">
+                                    <DoubleAnimation.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="SundayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding SundayHeight}" Duration="0:0:2">
+                                    <DoubleAnimation.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </StackPanel.Triggers>
                 <StackPanel VerticalAlignment="Bottom">
                     <TextBlock Text="{Binding MondayValue, StringFormat=F}" HorizontalAlignment="Center">
                         <TextBlock.Background>
                             <SolidColorBrush Color="White" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
-                    <Rectangle Name="MondayBar" Height="{Binding MondayHeight}" Width="20" Fill="Black" />
+                    <Rectangle Name="MondayBar" Width="20" Fill="Black" />
                     <TextBlock Text="Monday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
@@ -106,7 +149,7 @@
                             <SolidColorBrush Color="White" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
-                    <Rectangle Name="TuesdayBar" Height="{Binding TuesdayHeight}" Width="20" Fill="Black" />
+                    <Rectangle Name="TuesdayBar" Width="20" Fill="Black" />
                     <TextBlock Text="Tuesday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
@@ -115,7 +158,7 @@
                             <SolidColorBrush Color="White" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
-                    <Rectangle Name="WednesdayBar" Height="{Binding WednesdayHeight}" Width="20" Fill="Black" />
+                    <Rectangle Name="WednesdayBar" Width="20" Fill="Black" />
                     <TextBlock Text="Wednesday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
@@ -124,7 +167,7 @@
                             <SolidColorBrush Color="White" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
-                    <Rectangle Name="ThursdayBar" Height="{Binding ThursdayHeight}" Width="20" Fill="Black" />
+                    <Rectangle Name="ThursdayBar" Width="20" Fill="Black" />
                     <TextBlock Text="Thursday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
@@ -133,7 +176,7 @@
                             <SolidColorBrush Color="White" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
-                    <Rectangle Name="FridayBar" Height="{Binding FridayHeight}" Width="20" Fill="Black" />
+                    <Rectangle Name="FridayBar" Width="20" Fill="Black" />
                     <TextBlock Text="Friday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
@@ -142,7 +185,7 @@
                             <SolidColorBrush Color="White" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
-                    <Rectangle Name="SaturdayBar" Height="{Binding SaturdayHeight}" Width="20" Fill="Black" />
+                    <Rectangle Name="SaturdayBar" Width="20" Fill="Black" />
                     <TextBlock Text="Saturday" />
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
@@ -151,7 +194,7 @@
                             <SolidColorBrush Color="White" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
-                    <Rectangle Name="SundayBar" Height="{Binding SundayHeight}" Width="20" Fill="Black" />
+                    <Rectangle Name="SundayBar" Width="20" Fill="Black" />
                     <TextBlock Text="Sunday" />
                 </StackPanel>
             </StackPanel>
