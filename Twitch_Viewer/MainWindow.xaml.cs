@@ -28,7 +28,7 @@ namespace Twitch_Viewer
         public static DebugSettingsWindow _debugSettings;
 
         public static string username;
-        public static readonly string workingDir = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+        public static readonly string workingDir = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
 
         private int gameListOffset = 0;
         private int gameStreamsOffset = 0;
@@ -875,7 +875,7 @@ namespace Twitch_Viewer
         }
         #endregion
 
-        private void statsButton_Click(object sender, RoutedEventArgs e)
+        private async void statsButton_Click(object sender, RoutedEventArgs e)
         {
             StatsWindow window = null;
 
@@ -887,9 +887,65 @@ namespace Twitch_Viewer
             }
             else if ((sender as Button).DataContext is StreamStatsItem)
             {
-                var item = (sender as Button).DataContext as StreamStatsItem;
+                var button = (sender as Button);
+                var grid = (button.Parent as Grid);
 
-                window = new StatsWindow(item);
+                var scrollViewer = (statsTab.Content as Grid).Children[2] as ScrollViewer;
+
+                var dockPanel = grid.Children[5] as DockPanel;
+
+                if (dockPanel.Visibility == Visibility.Collapsed)
+                {
+                    (grid.Children[0] as TextBlock).FontSize = 16;
+                    (grid.Children[0] as TextBlock).FontWeight = FontWeights.Bold;
+
+                    var margin = grid.Margin;
+                    margin.Bottom += 40;
+                    grid.Margin = margin;
+
+                    FadeItem(dockPanel, false);
+                    var offset = button.TranslatePoint(new Point(0, 0), scrollViewer);
+                    scrollViewer.ScrollToVerticalOffset(offset.Y);
+                }
+                else
+                {
+                    var margin = grid.Margin;
+                    margin.Bottom -= 40;
+                    grid.Margin = margin;
+
+                    (grid.Children[0] as TextBlock).FontSize = 12;
+                    (grid.Children[0] as TextBlock).FontWeight = FontWeights.Normal;
+                    FadeItem(dockPanel, true);
+                }
+
+                #region Circle Animation
+                //Ellipse circle = new Ellipse();
+                //circle.Width = 20;
+                //circle.Height = 20;
+                //circle.VerticalAlignment = VerticalAlignment.Center;
+                //circle.HorizontalAlignment = HorizontalAlignment.Center;
+                //circle.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+
+                //(statsTab.Content as Grid).Children.Add(circle);
+
+                ////var parent = VisualTreeHelper.GetParent(sender as Button) as UIElement;
+                //var parent = (statsTab.Content as Grid);
+                //var dist = button.TranslatePoint(new Point(0, 0), parent);
+                //var x = (parent.ActualWidth / 2 - dist.X - 10) * 2;
+                //var y = (parent.ActualHeight / 2 - dist.Y - 10) * 2;
+
+                //circle.Margin = new Thickness(x < 0 ? -x : 0, y < 0 ? -y : 0, x < 0 ? 0 : x, y < 0 ? 0 : y);
+
+                //DoubleAnimation da = new DoubleAnimation();
+                //da.To = parent.ActualWidth * 2;
+                //da.Duration = new Duration(TimeSpan.FromSeconds(3));
+                //da.EasingFunction = new ExponentialEase() { EasingMode = EasingMode.EaseOut, Exponent = 10 };
+
+                //circle.BeginAnimation(Ellipse.WidthProperty, da);
+                //circle.BeginAnimation(Ellipse.HeightProperty, da);
+                #endregion // Circle Animation
+
+                //window = new StatsWindow(item);
             }
             else if ((sender as Button).DataContext is GameStatsItem)
             {
@@ -897,9 +953,63 @@ namespace Twitch_Viewer
 
                 window = new StatsWindow(item);
             }
-
             
             window?.Show();
+        }
+
+        private void FadeItem(DockPanel item, bool fadeAway)
+        {
+            if (!fadeAway)
+            {
+                // If the item is already visible, then do not process it.
+                if (item.Visibility == Visibility.Visible)
+                    return;
+
+                // The item must be visible for the animations
+                // applied to it to be seen.
+                item.Visibility = Visibility.Visible;
+            }
+
+            Duration duration = new Duration(TimeSpan.FromMilliseconds(300));
+
+            #region Create Opacity Animation
+
+            DoubleAnimation animOpacity = new DoubleAnimation();
+            animOpacity.From = fadeAway ? 1 : 0;
+            animOpacity.To = fadeAway ? 0 : 1;
+            animOpacity.Duration = duration;
+            animOpacity.FillBehavior = FillBehavior.Stop;
+
+            // Since the animations' FillBehavior are set to 'Stop' we need to collapse
+            // the item after the animations complete, so that it looks like the
+            // item actually disappeared.	
+            if (fadeAway)
+                animOpacity.Completed += delegate { item.Visibility = Visibility.Collapsed; };
+
+            #endregion // Create Opacity Animation
+
+            #region Create Height Animation
+
+            DoubleAnimation animHeight = new DoubleAnimation();
+            animHeight.From = fadeAway ? item.ActualHeight : 0;
+            if (fadeAway)
+            {
+                animHeight.To = 0;
+            }
+            else
+            {
+                // Let the item measure itself as if it exists on-screen.
+                // Then use the generated height value as the target of the animation.
+                item.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+                animHeight.To = item.DesiredSize.Height;
+            }
+            animHeight.Duration = duration;
+            animHeight.FillBehavior = FillBehavior.Stop;
+
+            #endregion // Create Width Animation
+
+            item.BeginAnimation(ContentPresenter.OpacityProperty, animOpacity);
+            item.BeginAnimation(ContentPresenter.HeightProperty, animHeight);
         }
     }
 }

@@ -3,11 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Twitch_Viewer"
         xmlns:Properties="clr-namespace:Twitch_Viewer.Properties" x:Name="window" x:Class="Twitch_Viewer.MainWindow" DataContext="{Binding ElementName=window}"
         xmlns:hammer="clr-namespace:Hammer.SpinningWheel;assembly=Hammer.SpinningWheel"
         mc:Ignorable="d"
         Title="Twitch VLC Viewer" Height="700" Width="1090" MinWidth="525" MinHeight="300" Background="#FFF1F1F1" Loaded="Window_Loaded" Icon="imageResources/Icon.ico" SizeChanged="window_SizeChanged">
+    <Window.Resources>
+        <local:BooleanToVisibilityConverter x:Key="BoolToVisInverse" IsInverse="True" />
+        <local:BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <local:MultiplyConverter x:Key="MultiplyConverter" />
+    </Window.Resources>
+    
     <Grid x:Name="mainGrid" PreviewKeyDown="Grid_PreviewKeyDown">
         <TabControl x:Name="tabControl" BorderThickness="0" Margin="-2,-3,0,0" Padding="0" Background="Transparent" TabStripPlacement="Left">
 
@@ -316,12 +323,339 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid Height="20" Background="Transparent" Margin="5,10,5,0">
-                                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
-                                            <TextBlock Text="{Binding ViewCount, StringFormat='{}{0:00} mal angesehen'}" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                                            <TextBlock Text="{Binding ViewTime, StringFormat='{}{0:%d} Tage, {0:hh} Stunden, {0:mm} Minuten, {0:ss} Sekunden'}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,50,0" />
-                                            <Button Content="i" Width="20" HorizontalAlignment="Right" Margin="0,0,25,0" Click="statsButton_Click" />
-                                            <Button Content="X" Width="20" HorizontalAlignment="Right" Foreground="Red" Click="deleteStatsButton_Click" />
+                                        <!-- http://stackoverflow.com/questions/2186933/wpf-animation-binding-to-the-to-attribute-of-storyboard-animation/14164245#14164245 -->
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Visibility, ElementName=ExtendedStats}" Value="Visible">
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetName="MondayBar" Storyboard.TargetProperty="Tag" From="0" To="1" Duration="0:0:2" BeginTime="0:0:0.4">
+                                                                <DoubleAnimation.EasingFunction>
+                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                </DoubleAnimation.EasingFunction>
+                                                            </DoubleAnimation>
+                                                            <DoubleAnimation Storyboard.TargetName="TuesdayBar" Storyboard.TargetProperty="Tag" From="0" To="1" Duration="0:0:2" BeginTime="0:0:0.4">
+                                                                <DoubleAnimation.EasingFunction>
+                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                </DoubleAnimation.EasingFunction>
+                                                            </DoubleAnimation>
+                                                            <DoubleAnimation Storyboard.TargetName="WednesdayBar" Storyboard.TargetProperty="Tag" From="0" To="1" Duration="0:0:2" BeginTime="0:0:0.4">
+                                                                <DoubleAnimation.EasingFunction>
+                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                </DoubleAnimation.EasingFunction>
+                                                            </DoubleAnimation>
+                                                            <DoubleAnimation Storyboard.TargetName="ThursdayBar" Storyboard.TargetProperty="Tag" From="0" To="1" Duration="0:0:2" BeginTime="0:0:0.4">
+                                                                <DoubleAnimation.EasingFunction>
+                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                </DoubleAnimation.EasingFunction>
+                                                            </DoubleAnimation>
+                                                            <DoubleAnimation Storyboard.TargetName="FridayBar" Storyboard.TargetProperty="Tag" From="0" To="1" Duration="0:0:2" BeginTime="0:0:0.4">
+                                                                <DoubleAnimation.EasingFunction>
+                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                </DoubleAnimation.EasingFunction>
+                                                            </DoubleAnimation>
+                                                            <DoubleAnimation Storyboard.TargetName="SaturdayBar" Storyboard.TargetProperty="Tag" From="0" To="1" Duration="0:0:2" BeginTime="0:0:0.4">
+                                                                <DoubleAnimation.EasingFunction>
+                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                </DoubleAnimation.EasingFunction>
+                                                            </DoubleAnimation>
+                                                            <DoubleAnimation Storyboard.TargetName="SundayBar" Storyboard.TargetProperty="Tag" From="0" To="1" Duration="0:0:2" BeginTime="0:0:0.4">
+                                                                <DoubleAnimation.EasingFunction>
+                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                </DoubleAnimation.EasingFunction>
+                                                            </DoubleAnimation>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetName="MondayBar" Storyboard.TargetProperty="Tag" To="0"  Duration="0:0:0"/>
+                                                            <DoubleAnimation Storyboard.TargetName="TuesdayBar" Storyboard.TargetProperty="Tag" To="0" Duration="0:0:0" />
+                                                            <DoubleAnimation Storyboard.TargetName="WednesdayBar" Storyboard.TargetProperty="Tag" To="0" Duration="0:0:0" />
+                                                            <DoubleAnimation Storyboard.TargetName="ThursdayBar" Storyboard.TargetProperty="Tag" To="0" Duration="0:0:0" />
+                                                            <DoubleAnimation Storyboard.TargetName="FridayBar" Storyboard.TargetProperty="Tag" To="0" Duration="0:0:0" />
+                                                            <DoubleAnimation Storyboard.TargetName="SaturdayBar" Storyboard.TargetProperty="Tag" To="0" Duration="0:0:0" />
+                                                            <DoubleAnimation Storyboard.TargetName="SundayBar" Storyboard.TargetProperty="Tag" To="0" Duration="0:0:0" />
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.ExitActions>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                        <Grid Background="Transparent" Margin="5,10,5,0">
+                                            <TextBlock Text="{Binding Name}" VerticalAlignment="Top" />
+                                            <TextBlock Text="{Binding ViewCount, StringFormat='{}{0:00} mal angesehen'}" VerticalAlignment="Top" HorizontalAlignment="Center" />
+                                            <TextBlock Text="{Binding ViewTime, StringFormat='{}{0:%d} Tage, {0:hh} Stunden, {0:mm} Minuten, {0:ss} Sekunden'}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,50,0" />
+                                            <Button Content="i" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,25,0" Click="statsButton_Click" />
+                                            <Button Content="X" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="Red" Click="deleteStatsButton_Click" />
+                                            <DockPanel x:Name="ExtendedStats" Visibility="Collapsed" Margin="0,30,0,5">
+                                                <Grid DockPanel.Dock="Top" Margin="0,5,0,5">
+                                                    <TextBlock Text="Startzeit" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                                                    <TextBlock Text="Dauer" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,18,0" />
+                                                </Grid>
+                                                <ScrollViewer DockPanel.Dock="Top" Height="200">
+                                                    <Grid>
+                                                        <ItemsControl x:Name="ViewTimeDataControl" ItemsSource="{Binding ViewTimeData}">
+                                                            <ItemsControl.ItemsPanel>
+                                                                <ItemsPanelTemplate>
+                                                                    <StackPanel />
+                                                                </ItemsPanelTemplate>
+                                                            </ItemsControl.ItemsPanel>
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <StackPanel>
+                                                                        <Grid Margin="0,2,0,2">
+                                                                            <TextBlock Text="{Binding Start, StringFormat=dd.MM.yyyy - HH:mm \'Uhr\'}" HorizontalAlignment="Left" />
+                                                                            <TextBlock Text="{Binding Duration}" HorizontalAlignment="Right" />
+                                                                        </Grid>
+                                                                        <Rectangle Height="1" Fill="#FF8B8B8B" />
+                                                                    </StackPanel>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                        <TextBlock Text="Keine View Times vorhanden." VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding ElementName=ViewTimeDataControl, Path=HasItems, Converter={StaticResource BoolToVisInverse}}" />
+                                                    </Grid>
+                                                </ScrollViewer>
+                                                <Grid DockPanel.Dock="Top" Margin="0,10,0,10">
+                                                    <TextBlock Text="Gesamtzeit" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                                                    <TextBlock Text="{Binding ViewTime}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,18,0" />
+                                                    <TextBlock Text="Gesamtzahl an Views" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,20,0,0" />
+                                                    <TextBlock Text="{Binding ViewCount}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,18,0" />
+                                                </Grid>
+                                                <!-- Graph -->
+                                                <Grid DockPanel.Dock="Bottom" Height="231" HorizontalAlignment="Center" Margin="0,0,18,0" DataContext="{Binding Graph}">
+                                                    <Grid Margin="0,5,0,0">
+                                                        <!-- Scale -->
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="20" />
+                                                            <RowDefinition Height="20" />
+                                                            <RowDefinition Height="20" />
+                                                            <RowDefinition Height="20" />
+                                                            <RowDefinition Height="20" />
+                                                            <RowDefinition Height="20" />
+                                                            <RowDefinition Height="20" />
+                                                            <RowDefinition Height="20" />
+                                                            <RowDefinition Height="20" />
+                                                            <RowDefinition Height="20" />
+                                                            <RowDefinition Height="20" />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="35" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="100%" TextAlignment="Right" Margin="0,0,5,0" />
+                                                        <!--<Rectangle Grid.Row="0" Grid.Column="1" Height="1" Stroke="Gray" StrokeDashArray="2 2" />-->
+                                                        <Line Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Stroke="Gray" StrokeDashArray="2 2" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" />
+                                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="90%" TextAlignment="Right" Margin="0,0,5,0" />
+                                                        <Line Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Stroke="Gray" StrokeDashArray="2 2" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" />
+                                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="80%" TextAlignment="Right" Margin="0,0,5,0" />
+                                                        <Line Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Stroke="Gray" StrokeDashArray="2 2" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" />
+                                                        <TextBlock Grid.Row="3" Grid.Column="0" Text="70%" TextAlignment="Right" Margin="0,0,5,0" />
+                                                        <Line Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Stroke="Gray" StrokeDashArray="2 2" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" />
+                                                        <TextBlock Grid.Row="4" Grid.Column="0" Text="60%" TextAlignment="Right" Margin="0,0,5,0" />
+                                                        <Line Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Stroke="Gray" StrokeDashArray="2 2" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" />
+                                                        <TextBlock Grid.Row="5" Grid.Column="0" Text="50%" TextAlignment="Right" Margin="0,0,5,0" />
+                                                        <Line Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Stroke="Gray" StrokeDashArray="2 2" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" />
+                                                        <TextBlock Grid.Row="6" Grid.Column="0" Text="40%" TextAlignment="Right" Margin="0,0,5,0" />
+                                                        <Line Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Stroke="Gray" StrokeDashArray="2 2" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" />
+                                                        <TextBlock Grid.Row="7" Grid.Column="0" Text="30%" TextAlignment="Right" Margin="0,0,5,0" />
+                                                        <Line Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Stroke="Gray" StrokeDashArray="2 2" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" />
+                                                        <TextBlock Grid.Row="8" Grid.Column="0" Text="20%" TextAlignment="Right" Margin="0,0,5,0" />
+                                                        <Line Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Stroke="Gray" StrokeDashArray="2 2" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" />
+                                                        <TextBlock Grid.Row="9" Grid.Column="0" Text="10%" TextAlignment="Right" Margin="0,0,5,0" />
+                                                        <Line Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Stroke="Gray" StrokeDashArray="2 2" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" />
+                                                        <TextBlock Grid.Row="10" Grid.Column="0" Text="0%" TextAlignment="Right" Margin="0,0,5,0" />
+                                                        <Rectangle Grid.Row="10" Grid.Column="1" Height="1" Fill="Gray" />
+                                                        <Rectangle Grid.Row="0" Grid.Column="0" Fill="Gray" Width="1" HorizontalAlignment="Right" Grid.RowSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=RowDefinitions.Count, Mode=OneWay}" />
+                                                    </Grid>
+                                                    <StackPanel Orientation="Horizontal" Margin="30,0,0,0">
+                                                        <StackPanel.Resources>
+                                                            <Style TargetType="{x:Type StackPanel}">
+                                                                <Setter Property="Margin" Value="5,0,5,0" />
+                                                            </Style>
+                                                        </StackPanel.Resources>
+                                                        <!--<StackPanel.Triggers>
+                                                            <DataTrigger Binding="{Binding Visibility, ElementName=ExtendedStats}" Value="Visible">
+                                                                <DataTrigger.EnterActions>
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Storyboard.TargetName="MondayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding MondayHeight}" Duration="0:0:2">
+                                                                                <DoubleAnimation.EasingFunction>
+                                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                                </DoubleAnimation.EasingFunction>
+                                                                            </DoubleAnimation>
+                                                                            <DoubleAnimation Storyboard.TargetName="TuesdayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding TuesdayHeight}" Duration="0:0:2">
+                                                                                <DoubleAnimation.EasingFunction>
+                                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                                </DoubleAnimation.EasingFunction>
+                                                                            </DoubleAnimation>
+                                                                            <DoubleAnimation Storyboard.TargetName="WednesdayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding WednesdayHeight}" Duration="0:0:2">
+                                                                                <DoubleAnimation.EasingFunction>
+                                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                                </DoubleAnimation.EasingFunction>
+                                                                            </DoubleAnimation>
+                                                                            <DoubleAnimation Storyboard.TargetName="ThursdayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding ThursdayHeight}" Duration="0:0:2">
+                                                                                <DoubleAnimation.EasingFunction>
+                                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                                </DoubleAnimation.EasingFunction>
+                                                                            </DoubleAnimation>
+                                                                            <DoubleAnimation Storyboard.TargetName="FridayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding FridayHeight}" Duration="0:0:2">
+                                                                                <DoubleAnimation.EasingFunction>
+                                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                                </DoubleAnimation.EasingFunction>
+                                                                            </DoubleAnimation>
+                                                                            <DoubleAnimation Storyboard.TargetName="SaturdayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding SaturdayHeight}" Duration="0:0:2">
+                                                                                <DoubleAnimation.EasingFunction>
+                                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                                </DoubleAnimation.EasingFunction>
+                                                                            </DoubleAnimation>
+                                                                            <DoubleAnimation Storyboard.TargetName="SundayBar" Storyboard.TargetProperty="(FrameworkElement.Height)" From="0" To="{Binding SundayHeight}" Duration="0:0:2">
+                                                                                <DoubleAnimation.EasingFunction>
+                                                                                    <ExponentialEase EasingMode="EaseOut" Exponent="10" />
+                                                                                </DoubleAnimation.EasingFunction>
+                                                                            </DoubleAnimation>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </DataTrigger.EnterActions>
+                                                            </DataTrigger>
+                                                        </StackPanel.Triggers>-->
+                                                        <StackPanel VerticalAlignment="Bottom">
+                                                            <TextBlock Text="{Binding MondayValue, StringFormat=F}" HorizontalAlignment="Center">
+                                                                <TextBlock.Background>
+                                                                    <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
+                                                                </TextBlock.Background>
+                                                            </TextBlock>
+                                                            <Rectangle Name="MondayBar" Width="20" Fill="Black">
+                                                                <Rectangle.Tag>
+                                                                    <sys:Double>0.0</sys:Double>
+                                                                </Rectangle.Tag>
+                                                                <Rectangle.Height>
+                                                                    <MultiBinding Converter="{StaticResource MultiplyConverter}">
+                                                                        <Binding Path="MondayHeight" />
+                                                                        <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                                    </MultiBinding>
+                                                                </Rectangle.Height>
+                                                            </Rectangle>
+                                                            <TextBlock Text="Monday" />
+                                                        </StackPanel>
+                                                        <StackPanel VerticalAlignment="Bottom">
+                                                            <TextBlock Text="{Binding TuesdayValue, StringFormat=F}" HorizontalAlignment="Center">
+                                                                <TextBlock.Background>
+                                                                    <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
+                                                                </TextBlock.Background>
+                                                            </TextBlock>
+                                                            <Rectangle Name="TuesdayBar" Width="20" Fill="Black">
+                                                                <Rectangle.Tag>
+                                                                    <sys:Double>0.0</sys:Double>
+                                                                </Rectangle.Tag>
+                                                                <Rectangle.Height>
+                                                                    <MultiBinding Converter="{StaticResource MultiplyConverter}">
+                                                                        <Binding Path="TuesdayHeight" />
+                                                                        <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                                    </MultiBinding>
+                                                                </Rectangle.Height>
+                                                            </Rectangle>
+                                                            <TextBlock Text="Tuesday" />
+                                                        </StackPanel>
+                                                        <StackPanel VerticalAlignment="Bottom">
+                                                            <TextBlock Text="{Binding WednesdayValue, StringFormat=F}" HorizontalAlignment="Center">
+                                                                <TextBlock.Background>
+                                                                    <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
+                                                                </TextBlock.Background>
+                                                            </TextBlock>
+                                                            <Rectangle Name="WednesdayBar" Width="20" Fill="Black">
+                                                                <Rectangle.Tag>
+                                                                    <sys:Double>0.0</sys:Double>
+                                                                </Rectangle.Tag>
+                                                                <Rectangle.Height>
+                                                                    <MultiBinding Converter="{StaticResource MultiplyConverter}">
+                                                                        <Binding Path="WednesdayHeight" />
+                                                                        <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                                    </MultiBinding>
+                                                                </Rectangle.Height>
+                                                            </Rectangle>
+                                                            <TextBlock Text="Wednesday" />
+                                                        </StackPanel>
+                                                        <StackPanel VerticalAlignment="Bottom">
+                                                            <TextBlock Text="{Binding ThursdayValue, StringFormat=F}" HorizontalAlignment="Center">
+                                                                <TextBlock.Background>
+                                                                    <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
+                                                                </TextBlock.Background>
+                                                            </TextBlock>
+                                                            <Rectangle Name="ThursdayBar" Width="20" Fill="Black">
+                                                                <Rectangle.Tag>
+                                                                    <sys:Double>0.0</sys:Double>
+                                                                </Rectangle.Tag>
+                                                                <Rectangle.Height>
+                                                                    <MultiBinding Converter="{StaticResource MultiplyConverter}">
+                                                                        <Binding Path="ThursdayHeight" />
+                                                                        <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                                    </MultiBinding>
+                                                                </Rectangle.Height>
+                                                            </Rectangle>
+                                                            <TextBlock Text="Thursday" />
+                                                        </StackPanel>
+                                                        <StackPanel VerticalAlignment="Bottom">
+                                                            <TextBlock Text="{Binding FridayValue, StringFormat=F}" HorizontalAlignment="Center">
+                                                                <TextBlock.Background>
+                                                                    <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
+                                                                </TextBlock.Background>
+                                                            </TextBlock>
+                                                            <Rectangle Name="FridayBar" Width="20" Fill="Black">
+                                                                <Rectangle.Tag>
+                                                                    <sys:Double>0.0</sys:Double>
+                                                                </Rectangle.Tag>
+                                                                <Rectangle.Height>
+                                                                    <MultiBinding Converter="{StaticResource MultiplyConverter}">
+                                                                        <Binding Path="FridayHeight" />
+                                                                        <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                                    </MultiBinding>
+                                                                </Rectangle.Height>
+                                                            </Rectangle>
+                                                            <TextBlock Text="Friday" />
+                                                        </StackPanel>
+                                                        <StackPanel VerticalAlignment="Bottom">
+                                                            <TextBlock Text="{Binding SaturdayValue, StringFormat=F}" HorizontalAlignment="Center">
+                                                                <TextBlock.Background>
+                                                                    <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
+                                                                </TextBlock.Background>
+                                                            </TextBlock>
+                                                            <Rectangle Name="SaturdayBar" Width="20" Fill="Black">
+                                                                <Rectangle.Tag>
+                                                                    <sys:Double>0.0</sys:Double>
+                                                                </Rectangle.Tag>
+                                                                <Rectangle.Height>
+                                                                    <MultiBinding Converter="{StaticResource MultiplyConverter}">
+                                                                        <Binding Path="SaturdayHeight" />
+                                                                        <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                                    </MultiBinding>
+                                                                </Rectangle.Height>
+                                                            </Rectangle>
+                                                            <TextBlock Text="Saturday" />
+                                                        </StackPanel>
+                                                        <StackPanel VerticalAlignment="Bottom">
+                                                            <TextBlock Text="{Binding SundayValue, StringFormat=F}" HorizontalAlignment="Center">
+                                                                <TextBlock.Background>
+                                                                    <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
+                                                                </TextBlock.Background>
+                                                            </TextBlock>
+                                                            <Rectangle Name="SundayBar" Width="20" Fill="Black">
+                                                                <Rectangle.Tag>
+                                                                    <sys:Double>0.0</sys:Double>
+                                                                </Rectangle.Tag>
+                                                                <Rectangle.Height>
+                                                                    <MultiBinding Converter="{StaticResource MultiplyConverter}">
+                                                                        <Binding Path="SundayHeight" />
+                                                                        <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                                    </MultiBinding>
+                                                                </Rectangle.Height>
+                                                            </Rectangle>
+                                                            <TextBlock Text="Sunday" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </DockPanel>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Twitch_Viewer"
         mc:Ignorable="d"
-        Title="Stats" Height="582" Width="458" ResizeMode="NoResize">
+        Title="Stats" Height="582" Width="458" ResizeMode="NoResize" Background="#FFF1F1F1">
     <DockPanel Margin="5">
         <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" FontWeight="Bold" FontSize="16" />
         <Grid DockPanel.Dock="Top" Margin="0,5,0,5">
@@ -137,7 +137,7 @@
                 <StackPanel VerticalAlignment="Bottom">
                     <TextBlock Text="{Binding MondayValue, StringFormat=F}" HorizontalAlignment="Center">
                         <TextBlock.Background>
-                            <SolidColorBrush Color="White" Opacity="0.5" />
+                            <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
                     <Rectangle Name="MondayBar" Width="20" Fill="Black" />
@@ -146,7 +146,7 @@
                 <StackPanel VerticalAlignment="Bottom">
                     <TextBlock Text="{Binding TuesdayValue, StringFormat=F}" HorizontalAlignment="Center">
                         <TextBlock.Background>
-                            <SolidColorBrush Color="White" Opacity="0.5" />
+                            <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
                     <Rectangle Name="TuesdayBar" Width="20" Fill="Black" />
@@ -155,7 +155,7 @@
                 <StackPanel VerticalAlignment="Bottom">
                     <TextBlock Text="{Binding WednesdayValue, StringFormat=F}" HorizontalAlignment="Center">
                         <TextBlock.Background>
-                            <SolidColorBrush Color="White" Opacity="0.5" />
+                            <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
                     <Rectangle Name="WednesdayBar" Width="20" Fill="Black" />
@@ -164,7 +164,7 @@
                 <StackPanel VerticalAlignment="Bottom">
                     <TextBlock Text="{Binding ThursdayValue, StringFormat=F}" HorizontalAlignment="Center">
                         <TextBlock.Background>
-                            <SolidColorBrush Color="White" Opacity="0.5" />
+                            <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
                     <Rectangle Name="ThursdayBar" Width="20" Fill="Black" />
@@ -173,7 +173,7 @@
                 <StackPanel VerticalAlignment="Bottom">
                     <TextBlock Text="{Binding FridayValue, StringFormat=F}" HorizontalAlignment="Center">
                         <TextBlock.Background>
-                            <SolidColorBrush Color="White" Opacity="0.5" />
+                            <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
                     <Rectangle Name="FridayBar" Width="20" Fill="Black" />
@@ -182,7 +182,7 @@
                 <StackPanel VerticalAlignment="Bottom">
                     <TextBlock Text="{Binding SaturdayValue, StringFormat=F}" HorizontalAlignment="Center">
                         <TextBlock.Background>
-                            <SolidColorBrush Color="White" Opacity="0.5" />
+                            <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
                     <Rectangle Name="SaturdayBar" Width="20" Fill="Black" />
@@ -191,7 +191,7 @@
                 <StackPanel VerticalAlignment="Bottom">
                     <TextBlock Text="{Binding SundayValue, StringFormat=F}" HorizontalAlignment="Center">
                         <TextBlock.Background>
-                            <SolidColorBrush Color="White" Opacity="0.5" />
+                            <SolidColorBrush Color="#FFF1F1F1" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
                     <Rectangle Name="SundayBar" Width="20" Fill="Black" />

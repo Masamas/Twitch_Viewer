@@ -124,6 +124,7 @@
       <DependentUpon>UsernameDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Types\StreamStatsItem.cs" />
+    <Compile Include="ValueConverters.cs" />
     <Page Include="DebugSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
