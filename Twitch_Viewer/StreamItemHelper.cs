@@ -9,7 +9,7 @@ namespace Twitch_Viewer
 {
     public static class StreamItemHelper
     {
-        private static Twixel twixel = new Twixel(Twixel.clientID, "http://localhost");
+        private static Twixel twixel = new Twixel("mfsqshg9m7s9bw3fxyb6niddken7c39", "http://localhost");
 
         public static async Task<TwixelAPI.Stream> getStream(string name)
         {

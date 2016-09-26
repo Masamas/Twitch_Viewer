@@ -8,7 +8,7 @@ namespace Twitch_Viewer
 {
     public static class DirectoryHandler
     {
-        private static Twixel twixel = new Twixel(Twixel.clientID, "http://localhost");
+        private static Twixel twixel = new Twixel("mfsqshg9m7s9bw3fxyb6niddken7c39", "http://localhost");
 
         public static async Task<List<Game>> getGames(int offset = 0, int limit = 25)
         {
@@ -16,12 +16,7 @@ namespace Twitch_Viewer
 
             Total<List<Game>> tmp = null;
 
-            try
-            {
-                tmp = await twixel.RetrieveTopGames(offset, limit);
-            }
-            catch (Exception e)
-            { Debugger.Log(1, "getGamesFailed", e.Message + "\n"); }
+            tmp = await twixel.RetrieveTopGames(offset, limit);
 
             games = tmp?.wrapped;
 
